@@ -5,6 +5,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ContentModule } from './content/content.module';
 import { SolanaModule } from './solana/solana.module';
+import { ApiModule } from './api/api.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SolanaModule } from './solana/solana.module';
     }),
     ContentModule,
     SolanaModule,
+    ApiModule,
   ],
   providers: [Logger],
 })
