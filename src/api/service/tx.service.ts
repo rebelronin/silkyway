@@ -12,8 +12,9 @@ export interface CreateTransferParams {
   sender: string;
   recipient: string;
   amount: number;
-  mint: string;
-  poolPda: string;
+  mint?: string;
+  poolPda?: string;
+  token?: string;
   memo?: string;
   claimableAfter?: number;
   claimableUntil?: number;
@@ -50,7 +51,15 @@ export class TxService {
 
     const sender = new PublicKey(params.sender);
     const recipient = new PublicKey(params.recipient);
-    const poolPda = new PublicKey(params.poolPda);
+
+    // Resolve pool: explicit poolPda > token symbol > mint lookup
+    let poolPda: PublicKey;
+    if (params.poolPda) {
+      poolPda = new PublicKey(params.poolPda);
+    } else {
+      const pool = await this.resolvePool(params.token, params.mint);
+      poolPda = new PublicKey(pool.poolPda);
+    }
 
     // Fetch pool to get token decimals
     const poolAccount = await client.fetchPool(poolPda);
@@ -283,6 +292,27 @@ export class TxService {
 
     await this.em.persistAndFlush(token);
     return token;
+  }
+
+  private async resolvePool(tokenSymbol?: string, mint?: string): Promise<Pool> {
+    if (mint) {
+      const token = await this.tokenRepo.findOne({ mint });
+      if (!token) throw new Error('TOKEN_NOT_FOUND');
+      const pool = await this.poolRepo.findOne({ token }, { populate: ['token'] });
+      if (!pool) throw new Error('POOL_NOT_FOUND');
+      return pool;
+    }
+    if (tokenSymbol) {
+      const token = await this.tokenRepo.findOne({ symbol: { $ilike: tokenSymbol } });
+      if (!token) throw new Error('TOKEN_NOT_FOUND');
+      const pool = await this.poolRepo.findOne({ token }, { populate: ['token'] });
+      if (!pool) throw new Error('POOL_NOT_FOUND');
+      return pool;
+    }
+    // Default: find first active pool
+    const pool = await this.poolRepo.findOne({ isPaused: false }, { populate: ['token'] });
+    if (!pool) throw new Error('NO_ACTIVE_POOL');
+    return pool;
   }
 
   private decodeMemo(memo: number[]): string {

@@ -24,10 +24,13 @@ export class TxController {
   async createTransfer(@Body() body: CreateTransferParams) {
     this.validatePubkey(body.sender, 'sender');
     this.validatePubkey(body.recipient, 'recipient');
-    this.validatePubkey(body.mint, 'mint');
-    this.validatePubkey(body.poolPda, 'poolPda');
+    if (body.poolPda) this.validatePubkey(body.poolPda, 'poolPda');
+    if (body.mint) this.validatePubkey(body.mint, 'mint');
     if (!body.amount || body.amount <= 0) {
       throw new BadRequestException({ ok: false, error: 'INVALID_AMOUNT', message: 'Amount must be positive' });
+    }
+    if (!body.poolPda && !body.mint && !body.token) {
+      throw new BadRequestException({ ok: false, error: 'MISSING_FIELD', message: 'Provide poolPda, mint, or token' });
     }
 
     const data = await this.txService.buildCreateTransfer(body);
@@ -72,12 +75,20 @@ export class TxController {
 
   @Post('/faucet')
   @HttpCode(200)
-  async faucet(@Body() body: { wallet: string }) {
+  async faucet(@Body() body: { wallet: string; token?: string }) {
     this.validatePubkey(body.wallet, 'wallet');
+    const wallet = new PublicKey(body.wallet);
 
     try {
-      const data = await this.solanaService.requestAirdrop(new PublicKey(body.wallet));
-      return { ok: true, data };
+      if (body.token === 'usdc') {
+        const data = await this.solanaService.mintUsdc(wallet);
+        return { ok: true, data };
+      } else if (body.token === 'sol' || !body.token) {
+        const data = await this.solanaService.requestAirdrop(wallet);
+        return { ok: true, data };
+      } else {
+        throw new BadRequestException({ ok: false, error: 'UNSUPPORTED_TOKEN', message: `Token '${body.token}' not supported. Use 'sol' or 'usdc'.` });
+      }
     } catch (e) {
       if (e.message?.startsWith('RATE_LIMITED')) {
         throw new BadRequestException({ ok: false, error: 'RATE_LIMITED', message: e.message });

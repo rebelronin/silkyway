@@ -11,10 +11,17 @@ import { ApiModule } from './api/api.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MikroOrmModule.forRoot({}),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '.well-known'),
-      serveRoot: '/.well-known',
-    }),
+    ServeStaticModule.forRoot(
+      {
+        rootPath: join(__dirname, '..', '.well-known'),
+        serveRoot: '/.well-known',
+      },
+      {
+        rootPath: join(__dirname, '..', 'public'),
+        serveRoot: '/',
+        serveStaticOptions: { index: false },
+      },
+    ),
     ContentModule,
     SolanaModule,
     ApiModule,
