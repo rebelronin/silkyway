@@ -424,7 +424,7 @@ Airdrop devnet SOL or USDC. Devnet only.
 {
   "ok": true,
   "data": {
-    "amount": 1.0,
+    "amount": 0.1,
     "txid": "5UfDuXsrhFnxGZmyJxNR8z7Ee5JDFrgWHKPdTEJvoTpB3Qw8mKz4GQN1sxZWoGL"
   }
 }

@@ -170,12 +170,12 @@ export class SolanaService implements OnModuleInit {
       throw new Error(`RATE_LIMITED: Try again in ${waitSec} seconds`);
     }
 
-    const txid = await this.connection.requestAirdrop(wallet, 1 * LAMPORTS_PER_SOL);
+    const txid = await this.connection.requestAirdrop(wallet, 0.1 * LAMPORTS_PER_SOL);
     await this.connection.confirmTransaction(txid, 'confirmed');
 
     this.faucetLastRequest.set(walletStr, Date.now());
 
-    return { sol: { amount: 1.0, txid } };
+    return { sol: { amount: 0.1, txid } };
   }
 
   async mintUsdc(wallet: PublicKey, amount: number = 100): Promise<{ usdc: { amount: number; txid: string } }> {
