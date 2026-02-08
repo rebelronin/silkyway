@@ -141,15 +141,25 @@ silk payments list --wallet receiver
 silk claim <transfer-pda> --wallet receiver
 ```
 
+## How transactions work
+
+Silkyway is non-custodial — your private keys never leave your machine.
+
+Every payment follows a build→sign→submit flow:
+
+1. **Build** — Call a `POST /api/tx/*` endpoint with payment details. The backend builds an unsigned Solana transaction and returns it as base64.
+2. **Sign** — The SDK signs the transaction locally using your private key (stored at `~/.config/silk/config.json`).
+3. **Submit** — Send the signed transaction to `POST /api/tx/submit`. The backend forwards it to Solana and confirms it on-chain.
+
+The backend handles Solana complexity (PDA derivation, instruction building, blockhash management) so agents don't have to. But it never sees your private key — it only builds the unsigned transaction structure. All authorization is enforced on-chain by the Solana program.
+
+When using the CLI (`silk pay`, `silk claim`, etc.), this flow happens automatically. When using the API directly, you handle each step yourself.
+
 ## API Endpoints
 
 Base URL: `https://silkyway.ai/api`
 
-All requests use `Content-Type: application/json`. The general flow for any transaction is:
-
-1. Call a `POST /api/tx/*` endpoint to build an unsigned transaction
-2. Sign the transaction locally with your private key
-3. Submit the signed transaction via `POST /api/tx/submit`
+All requests use `Content-Type: application/json`.
 
 ### POST /api/tx/create-transfer
 
@@ -511,7 +521,7 @@ Airdrop devnet SOL or USDC. Devnet only.
 
 ## Security
 
-- All transactions are built server-side as unsigned transactions
-- You sign locally with your private key before submitting
+- **Non-custodial** — the backend builds unsigned transactions; you sign locally with your private key before submitting
 - Private keys are never transmitted to the server
+- All authorization is enforced on-chain by the Solana program, not by the backend
 - Keys are stored locally at `~/.config/silk/config.json` — never share this file

@@ -50,13 +50,41 @@ Without escrow, agent payments are either prepaid (sender takes all risk) or pos
 - **Pay-per-use APIs** — pay per call into escrow, provider claims after serving the request
 - **Refundable deposits** — lock tokens for access, cancel to reclaim when done
 
+## How it works
+
+Silkyway is non-custodial. Your private keys never leave your machine.
+
+The system uses a build→sign→submit model:
+
+1. **Your agent requests a transaction** — the SDK calls the backend API with the payment details (recipient, amount, memo)
+2. **The backend builds an unsigned transaction** — it handles Solana complexity (PDA derivation, instruction building, blockhash) and returns a raw unsigned transaction
+3. **The SDK signs locally** — your private key signs the transaction on your machine
+4. **The SDK submits the signed transaction** — the backend forwards it to Solana and confirms it on-chain
+
+```
+Agent/SDK                     Backend API                    Solana
+   │                              │                            │
+   ├── "pay Alice 25 USDC" ─────►│                            │
+   │                              ├── build unsigned tx ──────►│
+   │◄── unsigned tx (base64) ─────┤                            │
+   │                              │                            │
+   │   sign with local key        │                            │
+   │                              │                            │
+   ├── signed tx ────────────────►│                            │
+   │                              ├── submit to Solana ───────►│
+   │                              │◄── confirmed ──────────────┤
+   │◄── { txid, transferPda } ────┤                            │
+```
+
+The backend never sees your private key. It only builds the transaction structure — authorization is enforced on-chain by the Solana program.
+
 ## Architecture
 
 **On-chain program** (Anchor/Solana) — pool-based escrow with operator model. Operators set fees, manage pools, can pause/reject. Pools support any SPL token (USDC on devnet). Uses `token_interface` for Token-2022 compatibility.
 
-**Backend API** (NestJS) — builds unsigned transactions, accepts signed submissions, indexes on-chain state to PostgreSQL. Private keys never leave the client.
+**Backend API** (NestJS) — builds unsigned transactions, accepts signed submissions, indexes on-chain state to PostgreSQL. Never handles private keys.
 
-**SDK + CLI** (`@silkyway/sdk`) — TypeScript client with Commander.js CLI. Multi-wallet support, JSON output for agents, `--human` flag for humans.
+**SDK + CLI** (`@silkyway/sdk`) — TypeScript client with Commander.js CLI. Handles local signing, multi-wallet support, JSON output for agents, `--human` flag for humans.
 
 ## Technical details
 
