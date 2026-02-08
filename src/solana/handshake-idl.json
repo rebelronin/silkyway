@@ -4,58 +4,1998 @@
     "name": "handshake",
     "version": "0.1.0",
     "spec": "0.1.0",
-    "description": "Programmable escrow on Solana"
+    "description": "A clean, modern, escrow-only Solana smart contract"
   },
   "instructions": [
     {
-      "name": "create_transfer",
-      "discriminator": [],
-      "accounts": [
-        { "name": "sender", "writable": true, "signer": true },
-        { "name": "pool", "writable": true },
-        { "name": "mint" },
-        { "name": "pool_token_account", "writable": true },
-        { "name": "sender_token_account", "writable": true },
-        { "name": "transfer", "writable": true },
-        { "name": "token_program" },
-        { "name": "system_program" },
-        { "name": "associated_token_program" }
+      "name": "cancel_transfer",
+      "discriminator": [
+        50,
+        32,
+        70,
+        130,
+        142,
+        41,
+        111,
+        175
       ],
-      "args": [
-        { "name": "recipient", "type": "pubkey" },
-        { "name": "nonce", "type": "u64" },
-        { "name": "amount", "type": "u64" },
-        { "name": "memo", "type": "string" },
-        { "name": "claimable_after", "type": "i64" },
-        { "name": "claimable_until", "type": "i64" }
-      ]
-    },
-    {
-      "name": "claim_transfer",
-      "discriminator": [],
       "accounts": [
-        { "name": "recipient", "writable": true, "signer": true },
-        { "name": "pool", "writable": true },
-        { "name": "mint" },
-        { "name": "pool_token_account", "writable": true },
-        { "name": "recipient_token_account", "writable": true },
-        { "name": "transfer", "writable": true },
-        { "name": "sender", "writable": true },
-        { "name": "token_program" }
+        {
+          "name": "sender",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "docs": [
+            "The pool this transfer belongs to"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.pool_id",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "The mint for validation"
+          ]
+        },
+        {
+          "name": "pool_token_account",
+          "docs": [
+            "Pool's token account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "sender_token_account",
+          "docs": [
+            "Sender's token account to receive refund"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "sender"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "transfer",
+          "docs": [
+            "Transfer account to cancel (closed to sender)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
       ],
       "args": []
     },
     {
-      "name": "cancel_transfer",
-      "discriminator": [],
+      "name": "claim_transfer",
+      "discriminator": [
+        202,
+        178,
+        58,
+        190,
+        230,
+        234,
+        229,
+        17
+      ],
       "accounts": [
-        { "name": "sender", "writable": true, "signer": true },
-        { "name": "pool", "writable": true },
-        { "name": "mint" },
-        { "name": "pool_token_account", "writable": true },
-        { "name": "sender_token_account", "writable": true },
-        { "name": "transfer", "writable": true },
-        { "name": "token_program" }
+        {
+          "name": "recipient",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "docs": [
+            "The pool this transfer belongs to"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.pool_id",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "The mint for validation"
+          ]
+        },
+        {
+          "name": "pool_token_account",
+          "docs": [
+            "Pool's token account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "recipient_token_account",
+          "docs": [
+            "Recipient's token account to receive funds"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "recipient"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "transfer",
+          "docs": [
+            "Transfer account to claim (closed to sender on success)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "sender",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_pool",
+      "discriminator": [
+        140,
+        189,
+        209,
+        23,
+        239,
+        62,
+        239,
+        11
+      ],
+      "accounts": [
+        {
+          "name": "operator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "docs": [
+            "The pool (will be closed)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.pool_id",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "The mint for validation"
+          ]
+        },
+        {
+          "name": "pool_token_account",
+          "docs": [
+            "Pool's token account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "operator_token_account",
+          "docs": [
+            "Operator's token account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "operator"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "withdrawal_amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "create_transfer",
+      "discriminator": [
+        142,
+        232,
+        86,
+        212,
+        85,
+        158,
+        131,
+        190
+      ],
+      "accounts": [
+        {
+          "name": "sender",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "docs": [
+            "The pool this transfer belongs to"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.pool_id",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "The mint for validation"
+          ]
+        },
+        {
+          "name": "pool_token_account",
+          "docs": [
+            "Pool's token account where funds are stored"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "sender_token_account",
+          "docs": [
+            "Sender's token account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "sender"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "transfer",
+          "docs": [
+            "Transfer account - PDA derived from sender, recipient, and nonce"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  110,
+                  100,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sender"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  99,
+                  105,
+                  112,
+                  105,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "recipient"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  110,
+                  111,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "nonce"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "recipient",
+          "type": "pubkey"
+        },
+        {
+          "name": "nonce",
+          "type": "u64"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "memo",
+          "type": "string"
+        },
+        {
+          "name": "claimable_after",
+          "type": "i64"
+        },
+        {
+          "name": "claimable_until",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "decline_transfer",
+      "discriminator": [
+        157,
+        102,
+        22,
+        26,
+        29,
+        72,
+        206,
+        181
+      ],
+      "accounts": [
+        {
+          "name": "recipient",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "docs": [
+            "The pool this transfer belongs to"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.pool_id",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "The mint for validation"
+          ]
+        },
+        {
+          "name": "pool_token_account",
+          "docs": [
+            "Pool's token account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "sender_token_account",
+          "docs": [
+            "Sender's token account to receive refund"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "transfer.sender",
+                "account": "SecureTransfer"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "transfer",
+          "docs": [
+            "Transfer account to decline (closed to sender)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "sender",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "reason",
+          "type": {
+            "option": "u8"
+          }
+        }
+      ]
+    },
+    {
+      "name": "destroy_transfer",
+      "discriminator": [
+        213,
+        186,
+        122,
+        7,
+        20,
+        48,
+        250,
+        144
+      ],
+      "accounts": [
+        {
+          "name": "operator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "docs": [
+            "The pool (must be paused)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.pool_id",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "The mint for validation"
+          ]
+        },
+        {
+          "name": "pool_token_account",
+          "docs": [
+            "Pool's token account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "operator_token_account",
+          "docs": [
+            "Operator's token account to receive funds"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "operator"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "transfer",
+          "docs": [
+            "Transfer to destroy (closed to operator)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "expire_transfer",
+      "discriminator": [
+        120,
+        220,
+        22,
+        191,
+        234,
+        70,
+        205,
+        117
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "docs": [
+            "Anyone can call this (permissionless)"
+          ],
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "docs": [
+            "The pool this transfer belongs to"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.pool_id",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "The mint for validation"
+          ]
+        },
+        {
+          "name": "pool_token_account",
+          "docs": [
+            "Pool's token account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "sender_token_account",
+          "docs": [
+            "Sender's token account to receive refund"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "transfer.sender",
+                "account": "SecureTransfer"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "transfer",
+          "docs": [
+            "Transfer account to expire (closed to sender)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "sender",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "init_pool",
+      "discriminator": [
+        116,
+        233,
+        199,
+        204,
+        115,
+        159,
+        171,
+        36
+      ],
+      "accounts": [
+        {
+          "name": "operator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "The token mint this pool will handle"
+          ]
+        },
+        {
+          "name": "pool",
+          "docs": [
+            "Pool account - PDA derived from pool_id"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "pool_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "pool_token_account",
+          "docs": [
+            "Pool's token account - where escrowed funds are stored"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "pool_id",
+          "type": "pubkey"
+        },
+        {
+          "name": "transfer_fee_bps",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "pause_pool",
+      "discriminator": [
+        160,
+        15,
+        12,
+        189,
+        160,
+        0,
+        243,
+        245
+      ],
+      "accounts": [
+        {
+          "name": "operator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.pool_id",
+                "account": "Pool"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "is_paused",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "reject_transfer",
+      "discriminator": [
+        250,
+        250,
+        180,
+        34,
+        151,
+        19,
+        110,
+        207
+      ],
+      "accounts": [
+        {
+          "name": "operator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "docs": [
+            "The pool this transfer belongs to"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.pool_id",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "The mint for validation"
+          ]
+        },
+        {
+          "name": "pool_token_account",
+          "docs": [
+            "Pool's token account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "sender_token_account",
+          "docs": [
+            "Sender's token account to receive refund"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "transfer.sender",
+                "account": "SecureTransfer"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "transfer",
+          "docs": [
+            "Transfer account to reject (closed to sender)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "sender",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "reason",
+          "type": {
+            "option": "u8"
+          }
+        }
+      ]
+    },
+    {
+      "name": "reset_pool",
+      "discriminator": [
+        108,
+        172,
+        93,
+        91,
+        146,
+        8,
+        155,
+        112
+      ],
+      "accounts": [
+        {
+          "name": "operator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.pool_id",
+                "account": "Pool"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "withdraw_fees",
+      "discriminator": [
+        198,
+        212,
+        171,
+        109,
+        144,
+        215,
+        174,
+        89
+      ],
+      "accounts": [
+        {
+          "name": "operator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "docs": [
+            "The pool"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.pool_id",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "The mint for validation"
+          ]
+        },
+        {
+          "name": "pool_token_account",
+          "docs": [
+            "Pool's token account"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "pool"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "operator_token_account",
+          "docs": [
+            "Operator's token account to receive fees"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "operator"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint",
+                "account": "Pool"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program"
+        }
       ],
       "args": []
     }
@@ -63,68 +2003,554 @@
   "accounts": [
     {
       "name": "Pool",
-      "discriminator": []
+      "discriminator": [
+        241,
+        154,
+        109,
+        4,
+        17,
+        177,
+        109,
+        188
+      ]
     },
     {
       "name": "SecureTransfer",
-      "discriminator": []
+      "discriminator": [
+        118,
+        66,
+        184,
+        123,
+        206,
+        74,
+        89,
+        221
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "FeesWithdrawn",
+      "discriminator": [
+        234,
+        15,
+        0,
+        119,
+        148,
+        241,
+        40,
+        21
+      ]
+    },
+    {
+      "name": "PoolClosed",
+      "discriminator": [
+        106,
+        46,
+        29,
+        231,
+        42,
+        44,
+        73,
+        119
+      ]
+    },
+    {
+      "name": "PoolCreated",
+      "discriminator": [
+        202,
+        44,
+        41,
+        88,
+        104,
+        220,
+        157,
+        82
+      ]
+    },
+    {
+      "name": "PoolPaused",
+      "discriminator": [
+        228,
+        218,
+        62,
+        53,
+        29,
+        211,
+        159,
+        236
+      ]
+    },
+    {
+      "name": "PoolReset",
+      "discriminator": [
+        34,
+        242,
+        100,
+        109,
+        183,
+        59,
+        213,
+        92
+      ]
+    },
+    {
+      "name": "TransferCancelled",
+      "discriminator": [
+        117,
+        98,
+        70,
+        151,
+        137,
+        80,
+        144,
+        86
+      ]
+    },
+    {
+      "name": "TransferClaimed",
+      "discriminator": [
+        145,
+        226,
+        18,
+        63,
+        217,
+        2,
+        35,
+        236
+      ]
+    },
+    {
+      "name": "TransferCreated",
+      "discriminator": [
+        26,
+        150,
+        222,
+        191,
+        158,
+        158,
+        186,
+        179
+      ]
+    },
+    {
+      "name": "TransferDeclined",
+      "discriminator": [
+        248,
+        45,
+        227,
+        120,
+        157,
+        96,
+        169,
+        163
+      ]
+    },
+    {
+      "name": "TransferDestroyed",
+      "discriminator": [
+        26,
+        33,
+        63,
+        118,
+        153,
+        112,
+        49,
+        0
+      ]
+    },
+    {
+      "name": "TransferExpired",
+      "discriminator": [
+        253,
+        147,
+        182,
+        82,
+        75,
+        15,
+        151,
+        141
+      ]
+    },
+    {
+      "name": "TransferRejected",
+      "discriminator": [
+        223,
+        141,
+        163,
+        100,
+        228,
+        226,
+        53,
+        169
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "MathOverflow",
+      "msg": "Mathematical overflow occurred"
+    },
+    {
+      "code": 6001,
+      "name": "TransferNotActive",
+      "msg": "Transfer is not in active status"
+    },
+    {
+      "code": 6002,
+      "name": "CannotClaim",
+      "msg": "Claim deadline has passed"
+    },
+    {
+      "code": 6003,
+      "name": "ConditionsNotMet",
+      "msg": "Release conditions not met"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidCondition",
+      "msg": "Invalid condition parameters"
+    },
+    {
+      "code": 6005,
+      "name": "InsufficientFunds",
+      "msg": "Insufficient funds in vault"
+    },
+    {
+      "code": 6006,
+      "name": "PoolPaused",
+      "msg": "Pool is paused"
+    },
+    {
+      "code": 6007,
+      "name": "Unauthorized",
+      "msg": "Unauthorized action"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidTimeWindow",
+      "msg": "Invalid time window"
+    },
+    {
+      "code": 6009,
+      "name": "DepositTooSmall",
+      "msg": "Deposit amount too small"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidFeeConfig",
+      "msg": "Invalid fee configuration"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidTransferFee",
+      "msg": "Invalid transfer fee"
+    },
+    {
+      "code": 6012,
+      "name": "TransferAlreadyClaimed",
+      "msg": "Transfer already claimed"
+    },
+    {
+      "code": 6013,
+      "name": "TransferAlreadyCancelled",
+      "msg": "Transfer already cancelled"
+    },
+    {
+      "code": 6014,
+      "name": "TransferAlreadyRejected",
+      "msg": "Transfer already rejected"
+    },
+    {
+      "code": 6015,
+      "name": "TransferExpired",
+      "msg": "Transfer is expired"
+    },
+    {
+      "code": 6016,
+      "name": "OnlySenderCanCancel",
+      "msg": "Only sender can cancel transfer"
+    },
+    {
+      "code": 6017,
+      "name": "OnlyRecipientCanClaim",
+      "msg": "Only recipient can claim transfer"
+    },
+    {
+      "code": 6018,
+      "name": "OnlyOperatorCanReject",
+      "msg": "Only operator can reject transfer"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidMemoLength",
+      "msg": "Invalid memo length"
+    },
+    {
+      "code": 6020,
+      "name": "ClaimDeadlineNotPassed",
+      "msg": "Claim deadline has not passed"
+    },
+    {
+      "code": 6021,
+      "name": "CalculationError",
+      "msg": "Calculation error"
+    },
+    {
+      "code": 6022,
+      "name": "MissingAccount",
+      "msg": "Missing required account"
+    },
+    {
+      "code": 6023,
+      "name": "InvalidMint",
+      "msg": "Invalid mint"
+    },
+    {
+      "code": 6024,
+      "name": "StalePoolValue",
+      "msg": "Pool value is stale and must be updated"
+    },
+    {
+      "code": 6025,
+      "name": "InvalidOperation",
+      "msg": "Invalid operation for this pool type"
+    },
+    {
+      "code": 6026,
+      "name": "OutstandingTransfers",
+      "msg": "Cannot reset pool with outstanding transfers"
+    },
+    {
+      "code": 6027,
+      "name": "InvalidTransfer",
+      "msg": "Invalid transfer"
+    },
+    {
+      "code": 6028,
+      "name": "TransferAlreadyDeclined",
+      "msg": "Transfer already declined"
+    },
+    {
+      "code": 6029,
+      "name": "OnlyRecipientCanDecline",
+      "msg": "Only recipient can decline transfer"
     }
   ],
   "types": [
+    {
+      "name": "ConditionType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "TimeDelay"
+          },
+          {
+            "name": "MultiSig"
+          },
+          {
+            "name": "Oracle"
+          },
+          {
+            "name": "Milestone"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FeesWithdrawn",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "operator",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
     {
       "name": "Pool",
       "type": {
         "kind": "struct",
         "fields": [
-          { "name": "version", "type": "u8" },
-          { "name": "bump", "type": "u8" },
-          { "name": "pool_id", "type": "pubkey" },
-          { "name": "operator", "type": "pubkey" },
-          { "name": "mint", "type": "pubkey" },
-          { "name": "transfer_fee_bps", "type": "u16" },
-          { "name": "total_deposits", "type": "u64" },
-          { "name": "total_withdrawals", "type": "u64" },
-          { "name": "total_escrowed", "type": "u64" },
-          { "name": "total_transfers_created", "type": "u64" },
-          { "name": "total_transfers_resolved", "type": "u64" },
-          { "name": "collected_fees", "type": "u64" },
-          { "name": "is_paused", "type": "bool" }
+          {
+            "name": "version",
+            "docs": [
+              "Version for upgrades"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "Vault authority (PDA bump)"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "pool_id",
+            "docs": [
+              "Unique pool identifier"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "operator",
+            "docs": [
+              "Pool operator (can pause, close, withdraw fees)"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "docs": [
+              "Token mint (USDC, USDT, etc.)"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "transfer_fee_bps",
+            "docs": [
+              "Transfer fee in basis points (0-10000)"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "total_deposits",
+            "docs": [
+              "Cumulative deposits"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_withdrawals",
+            "docs": [
+              "Cumulative withdrawals"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_escrowed",
+            "docs": [
+              "Current amount held in escrow (total_deposits - total_withdrawals - collected_fees)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_transfers_created",
+            "docs": [
+              "Statistics"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_transfers_resolved",
+            "type": "u64"
+          },
+          {
+            "name": "collected_fees",
+            "docs": [
+              "Accumulated fees (can be withdrawn by operator)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "is_paused",
+            "docs": [
+              "Emergency controls"
+            ],
+            "type": "bool"
+          }
         ]
       }
     },
     {
-      "name": "SecureTransfer",
+      "name": "PoolClosed",
       "type": {
         "kind": "struct",
         "fields": [
-          { "name": "version", "type": "u8" },
-          { "name": "bump", "type": "u8" },
-          { "name": "nonce", "type": "u64" },
-          { "name": "sender", "type": "pubkey" },
-          { "name": "recipient", "type": "pubkey" },
-          { "name": "pool", "type": "pubkey" },
-          { "name": "amount", "type": "u64" },
-          { "name": "created_at", "type": "i64" },
-          { "name": "claimable_after", "type": "i64" },
-          { "name": "claimable_until", "type": "i64" },
-          { "name": "status", "type": { "defined": { "name": "TransferStatus" } } },
-          { "name": "release_conditions", "type": { "option": { "defined": { "name": "ReleaseConditions" } } } },
-          { "name": "memo", "type": { "array": ["u8", 64] } },
-          { "name": "compliance_hash", "type": { "option": { "array": ["u8", 32] } } }
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "operator",
+            "type": "pubkey"
+          },
+          {
+            "name": "withdrawal_amount",
+            "type": "u64"
+          }
         ]
       }
     },
     {
-      "name": "TransferStatus",
+      "name": "PoolCreated",
+      "docs": [
+        "Event emitted when a new pool is initialized"
+      ],
       "type": {
-        "kind": "enum",
-        "variants": [
-          { "name": "Active" },
-          { "name": "Claimed" },
-          { "name": "Cancelled" },
-          { "name": "Rejected" },
-          { "name": "Expired" },
-          { "name": "Declined" }
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool_id",
+            "type": "pubkey"
+          },
+          {
+            "name": "operator",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "transfer_fee_bps",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PoolPaused",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "is_paused",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PoolReset",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "pool",
+            "type": "pubkey"
+          }
         ]
       }
     },
@@ -133,23 +2559,402 @@
       "type": {
         "kind": "struct",
         "fields": [
-          { "name": "condition_type", "type": { "defined": { "name": "ConditionType" } } },
-          { "name": "params", "type": { "array": ["u8", 64] } }
+          {
+            "name": "condition_type",
+            "type": {
+              "defined": {
+                "name": "ConditionType"
+              }
+            }
+          },
+          {
+            "name": "params",
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          }
         ]
       }
     },
     {
-      "name": "ConditionType",
+      "name": "SecureTransfer",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "docs": [
+              "Version for upgrades"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "nonce",
+            "docs": [
+              "Client-provided nonce"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "sender",
+            "docs": [
+              "Participants"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool",
+            "docs": [
+              "Pool this transfer belongs to"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "docs": [
+              "Escrowed amount (in tokens)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "created_at",
+            "docs": [
+              "Timestamps"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "claimable_after",
+            "type": "i64"
+          },
+          {
+            "name": "claimable_until",
+            "type": "i64"
+          },
+          {
+            "name": "status",
+            "docs": [
+              "Status"
+            ],
+            "type": {
+              "defined": {
+                "name": "TransferStatus"
+              }
+            }
+          },
+          {
+            "name": "release_conditions",
+            "docs": [
+              "Optional release conditions"
+            ],
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "ReleaseConditions"
+                }
+              }
+            }
+          },
+          {
+            "name": "memo",
+            "docs": [
+              "Metadata - fixed size memo"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          },
+          {
+            "name": "compliance_hash",
+            "docs": [
+              "Travel rule compliance data hash"
+            ],
+            "type": {
+              "option": {
+                "array": [
+                  "u8",
+                  32
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransferCancelled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "transfer",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "sender",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransferClaimed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "transfer",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "sender",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fee",
+            "type": "u64"
+          },
+          {
+            "name": "net_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransferCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "transfer",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "sender",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "nonce",
+            "type": "u64"
+          },
+          {
+            "name": "memo",
+            "type": "string"
+          },
+          {
+            "name": "claimable_after",
+            "type": "i64"
+          },
+          {
+            "name": "claimable_until",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransferDeclined",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "transfer",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "sender",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "reason",
+            "type": {
+              "option": "u8"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransferDestroyed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "transfer",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "sender",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransferExpired",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "transfer",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "sender",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransferRejected",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "transfer",
+            "type": "pubkey"
+          },
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "sender",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "reason",
+            "type": {
+              "option": "u8"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "TransferStatus",
       "type": {
         "kind": "enum",
         "variants": [
-          { "name": "TimeDelay" },
-          { "name": "MultiSig" },
-          { "name": "Oracle" },
-          { "name": "Milestone" }
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Claimed"
+          },
+          {
+            "name": "Cancelled"
+          },
+          {
+            "name": "Rejected"
+          },
+          {
+            "name": "Expired"
+          },
+          {
+            "name": "Declined"
+          }
         ]
       }
     }
-  ],
-  "errors": []
+  ]
 }

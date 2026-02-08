@@ -230,12 +230,12 @@ export class TxService {
 
     // New transfer — need pool and token
     const poolPda = onChain.pool.toBase58();
-    let pool = await this.poolRepo.findOne({ poolPda });
+    let pool = await this.poolRepo.findOne({ poolPda }, { populate: ['token'] });
     if (!pool) {
       pool = await this.ensurePool(poolPda);
     }
 
-    const token = await this.getOrCreateToken(pool.token.mint);
+    const token = pool.token;
 
     const transfer = this.transferRepo.create({
       transferPda: pda,

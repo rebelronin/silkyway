@@ -7,12 +7,19 @@ import {
   TOKEN_PROGRAM_ID,
   TOKEN_2022_PROGRAM_ID,
 } from '@solana/spl-token';
+import { createHash } from 'node:crypto';
 
 // PDA seeds — must match the Rust program constants
 export const POOL_SEED = 'pool';
 export const SENDER_SEED = 'sender';
 export const RECIPIENT_SEED = 'recipient';
 export const NONCE_SEED = 'nonce';
+
+/** Deterministic pool ID from a human-readable name (SHA-256 hash → PublicKey) */
+export function generateNamedPoolId(name: string): PublicKey {
+  const hash = createHash('sha256').update(name).digest();
+  return new PublicKey(hash.subarray(0, 32));
+}
 
 // On-chain account interfaces (matching Rust structs)
 export interface PoolAccount {
@@ -94,6 +101,36 @@ export class HandshakeClient {
       isToken2022 ? TOKEN_2022_PROGRAM_ID : TOKEN_PROGRAM_ID,
     );
   };
+
+  async getInitPoolIx(
+    operator: PublicKey,
+    poolId: PublicKey,
+    mint: PublicKey,
+    transferFeeBps: number,
+    isToken2022: boolean = false,
+  ) {
+    const [poolPda, poolBump] = this.findPoolPda(poolId);
+    const tokenProgram = isToken2022 ? TOKEN_2022_PROGRAM_ID : TOKEN_PROGRAM_ID;
+    const poolTokenAccount = this.getTokenAccount(mint, poolPda, isToken2022);
+
+    const accounts = {
+      operator,
+      mint,
+      pool: poolPda,
+      poolTokenAccount,
+      tokenProgram,
+      associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      systemProgram: SystemProgram.programId,
+      rent: web3.SYSVAR_RENT_PUBKEY,
+    };
+
+    const ix = await (this.program.methods as any)
+      .initPool(poolId, transferFeeBps)
+      .accounts(accounts)
+      .instruction();
+
+    return { poolPda, poolBump, ix };
+  }
 
   async getCreateTransferIx(
     sender: PublicKey,

@@ -1,0 +1,1 @@
+npx mikro-orm schema:update -r --fk-checks=true
