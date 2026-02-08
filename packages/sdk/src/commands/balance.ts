@@ -1,5 +1,6 @@
 import { loadConfig, getWallet, getApiUrl } from '../config.js';
 import { createHttpClient } from '../client.js';
+import { outputSuccess } from '../output.js';
 
 export async function balance(opts: { wallet?: string }) {
   const config = loadConfig();
@@ -9,9 +10,5 @@ export async function balance(opts: { wallet?: string }) {
   const res = await client.get(`/api/wallet/${wallet.address}/balance`);
   const data = res.data.data;
 
-  console.log(`Wallet: ${wallet.label} (${wallet.address})`);
-  console.log(`  SOL: ${data.sol}`);
-  for (const t of data.tokens) {
-    console.log(`  ${t.symbol}: ${t.balance}`);
-  }
+  outputSuccess({ wallet: wallet.label, address: wallet.address, sol: data.sol, tokens: data.tokens });
 }

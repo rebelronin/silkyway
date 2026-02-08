@@ -6,38 +6,40 @@ import { pay } from './commands/pay.js';
 import { claim } from './commands/claim.js';
 import { cancel } from './commands/cancel.js';
 import { paymentsList, paymentsGet } from './commands/payments.js';
+import { wrapCommand } from './output.js';
 
 const program = new Command();
 program
   .name('handshake')
   .description('Handshake Protocol SDK — Agent payments on Solana')
-  .version('0.1.0');
+  .version('0.1.0')
+  .option('--human', 'Human-readable output');
 
 // wallet commands
-const wallet = program.command('wallet');
+const wallet = program.command('wallet').description('Manage wallets');
 wallet
   .command('create')
   .argument('[label]', 'wallet label', 'main')
   .description('Create a new wallet')
-  .action(walletCreate);
+  .action(wrapCommand(walletCreate));
 wallet
   .command('list')
   .description('List all wallets')
-  .action(walletList);
+  .action(wrapCommand(walletList));
 wallet
   .command('fund')
   .option('--sol', 'Request SOL only')
   .option('--usdc', 'Request USDC only')
   .option('--wallet <label>', 'Wallet to fund')
   .description('Fund wallet from devnet faucet')
-  .action(walletFund);
+  .action(wrapCommand(walletFund));
 
 // balance
 program
   .command('balance')
   .option('--wallet <label>', 'Wallet to check')
   .description('Check wallet balances')
-  .action(balance);
+  .action(wrapCommand(balance));
 
 // pay
 program
@@ -47,7 +49,7 @@ program
   .option('--memo <text>', 'Payment memo')
   .option('--wallet <label>', 'Sender wallet')
   .description('Send a USDC payment')
-  .action(pay);
+  .action(wrapCommand(pay));
 
 // claim
 program
@@ -55,7 +57,7 @@ program
   .argument('<transferPda>', 'Transfer PDA to claim')
   .option('--wallet <label>', 'Wallet to claim with')
   .description('Claim a received payment')
-  .action(claim);
+  .action(wrapCommand(claim));
 
 // cancel
 program
@@ -63,19 +65,19 @@ program
   .argument('<transferPda>', 'Transfer PDA to cancel')
   .option('--wallet <label>', 'Wallet to cancel with')
   .description('Cancel a sent payment')
-  .action(cancel);
+  .action(wrapCommand(cancel));
 
 // payments
-const payments = program.command('payments');
+const payments = program.command('payments').description('View payment history');
 payments
   .command('list')
   .option('--wallet <label>', 'Wallet to query')
   .description('List transfers')
-  .action(paymentsList);
+  .action(wrapCommand(paymentsList));
 payments
   .command('get')
   .argument('<transferPda>', 'Transfer PDA')
   .description('Get transfer details')
-  .action(paymentsGet);
+  .action(wrapCommand(paymentsGet));
 
 program.parse();

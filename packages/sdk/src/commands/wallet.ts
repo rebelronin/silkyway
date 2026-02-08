@@ -2,13 +2,14 @@ import { Keypair } from '@solana/web3.js';
 import bs58 from 'bs58';
 import { loadConfig, saveConfig, getWallet, getApiUrl } from '../config.js';
 import { createHttpClient } from '../client.js';
+import { SdkError } from '../errors.js';
+import { outputSuccess } from '../output.js';
 
 export async function walletCreate(label: string) {
   const config = loadConfig();
 
   if (config.wallets.find((w) => w.label === label)) {
-    console.error(`Wallet "${label}" already exists.`);
-    process.exit(1);
+    throw new SdkError('WALLET_EXISTS', `Wallet "${label}" already exists.`);
   }
 
   const keypair = Keypair.generate();
@@ -21,19 +22,17 @@ export async function walletCreate(label: string) {
   }
 
   saveConfig(config);
-  console.log(`Wallet "${label}" created: ${address}`);
+  outputSuccess({ action: 'wallet_created', label, address });
 }
 
 export async function walletList() {
   const config = loadConfig();
-  if (config.wallets.length === 0) {
-    console.log('No wallets. Run: handshake wallet create');
-    return;
-  }
-  for (const w of config.wallets) {
-    const marker = w.label === config.defaultWallet ? ' (default)' : '';
-    console.log(`  ${w.label}${marker}: ${w.address}`);
-  }
+  const wallets = config.wallets.map((w) => ({
+    label: w.label,
+    address: w.address,
+    default: w.label === config.defaultWallet,
+  }));
+  outputSuccess({ wallets });
 }
 
 export async function walletFund(opts: { sol?: boolean; usdc?: boolean; wallet?: string }) {
@@ -44,21 +43,25 @@ export async function walletFund(opts: { sol?: boolean; usdc?: boolean; wallet?:
   const doSol = opts.sol || (!opts.sol && !opts.usdc);
   const doUsdc = opts.usdc || (!opts.sol && !opts.usdc);
 
+  const funded: Record<string, unknown> = {};
+
   if (doSol) {
     try {
       const res = await client.post('/api/tx/faucet', { wallet: wallet.address });
-      console.log(`SOL: +${res.data.data.sol.amount} SOL (tx: ${res.data.data.sol.txid})`);
+      funded.sol = { amount: res.data.data.sol.amount, txid: res.data.data.sol.txid };
     } catch (e: any) {
-      console.error(`SOL faucet failed: ${e.message}`);
+      funded.sol = { error: e.code || 'FAUCET_FAILED', message: e.message };
     }
   }
 
   if (doUsdc) {
     try {
       const res = await client.post('/api/tx/faucet', { wallet: wallet.address, token: 'usdc' });
-      console.log(`USDC: +${res.data.data.usdc.amount} USDC (tx: ${res.data.data.usdc.txid})`);
+      funded.usdc = { amount: res.data.data.usdc.amount, txid: res.data.data.usdc.txid };
     } catch (e: any) {
-      console.error(`USDC faucet failed: ${e.message}`);
+      funded.usdc = { error: e.code || 'FAUCET_FAILED', message: e.message };
     }
   }
+
+  outputSuccess({ action: 'wallet_funded', wallet: wallet.label, address: wallet.address, funded });
 }

@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { createHttpClient, ClientConfig } from './client.js';
+import { SdkError } from './errors.js';
 
 export interface TokenInfo {
   mint: string;
@@ -42,7 +43,7 @@ export async function getTransfer(
   const res = await client.get(`/api/transfers/${transferPda}`);
   const transfer = res.data.data.transfer;
   if (!transfer) {
-    throw new Error(`Transfer not found: ${transferPda}`);
+    throw new SdkError('TRANSFER_NOT_FOUND', `Transfer not found: ${transferPda}`);
   }
   return transfer as TransferInfo;
 }

@@ -2,13 +2,15 @@ import { Keypair, Transaction } from '@solana/web3.js';
 import bs58 from 'bs58';
 import { loadConfig, getWallet, getApiUrl } from '../config.js';
 import { createHttpClient } from '../client.js';
+import { outputSuccess } from '../output.js';
+import { validateCancel } from '../validate.js';
 
 export async function cancel(transferPda: string, opts: { wallet?: string }) {
   const config = loadConfig();
   const wallet = getWallet(config, opts.wallet);
   const client = createHttpClient({ baseUrl: getApiUrl(config) });
 
-  console.log(`Cancelling transfer ${transferPda}...`);
+  await validateCancel(client, transferPda, wallet.address);
 
   // 1. Build unsigned cancel tx
   const buildRes = await client.post('/api/tx/cancel-transfer', {
@@ -28,6 +30,5 @@ export async function cancel(transferPda: string, opts: { wallet?: string }) {
     signedTx: tx.serialize().toString('base64'),
   });
 
-  console.log(`Payment cancelled!`);
-  console.log(`  TX: ${submitRes.data.data.txid}`);
+  outputSuccess({ action: 'cancel', transferPda, txid: submitRes.data.data.txid });
 }

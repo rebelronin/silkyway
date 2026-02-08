@@ -2,13 +2,15 @@ import { Keypair, Transaction } from '@solana/web3.js';
 import bs58 from 'bs58';
 import { loadConfig, getWallet, getApiUrl } from '../config.js';
 import { createHttpClient } from '../client.js';
+import { outputSuccess } from '../output.js';
+import { validateClaim } from '../validate.js';
 
 export async function claim(transferPda: string, opts: { wallet?: string }) {
   const config = loadConfig();
   const wallet = getWallet(config, opts.wallet);
   const client = createHttpClient({ baseUrl: getApiUrl(config) });
 
-  console.log(`Claiming transfer ${transferPda}...`);
+  await validateClaim(client, transferPda, wallet.address);
 
   // 1. Build unsigned claim tx
   const buildRes = await client.post('/api/tx/claim-transfer', {
@@ -28,6 +30,5 @@ export async function claim(transferPda: string, opts: { wallet?: string }) {
     signedTx: tx.serialize().toString('base64'),
   });
 
-  console.log(`Payment claimed!`);
-  console.log(`  TX: ${submitRes.data.data.txid}`);
+  outputSuccess({ action: 'claim', transferPda, txid: submitRes.data.data.txid });
 }
