@@ -22,6 +22,14 @@ export function useAccountActions() {
     [],
   );
 
+  const transferFromAccount = useCallback(
+    async (params: { signer: string; accountPda: string; recipient: string; amount: number }) => {
+      const res = await api.post('/api/account/transfer', params);
+      return res.data.data as { transaction: string };
+    },
+    [],
+  );
+
   const fetchAccount = useCallback(async (pda: string) => {
     const res = await api.get(`/api/account/${pda}`);
     return res.data.data;
@@ -75,6 +83,7 @@ export function useAccountActions() {
   return {
     createAccount,
     depositToAccount,
+    transferFromAccount,
     fetchAccount,
     signAndSubmit,
     togglePause,
