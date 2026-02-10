@@ -6,6 +6,7 @@ import { join } from 'path';
 import { ContentModule } from './content/content.module';
 import { SolanaModule } from './solana/solana.module';
 import { ApiModule } from './api/api.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ApiModule } from './api/api.module';
     ContentModule,
     SolanaModule,
     ApiModule,
+    ChatModule,
   ],
   providers: [Logger],
 })

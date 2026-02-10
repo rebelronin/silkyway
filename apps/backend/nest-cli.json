@@ -12,6 +12,10 @@
       {
         "include": "content/*.html",
         "outDir": "dist"
+      },
+      {
+        "include": "chat/prompts/*.txt",
+        "outDir": "dist"
       }
     ]
   }

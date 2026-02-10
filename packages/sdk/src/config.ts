@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
+import { randomUUID } from 'node:crypto';
 import { SdkError } from './errors.js';
 
 const CONFIG_DIR = path.join(os.homedir(), '.config', 'silk');
@@ -28,6 +29,7 @@ export interface HandshakeConfig {
   preferences: Record<string, unknown>;
   apiUrl?: string;
   account?: AccountInfo;
+  agentId?: string;
 }
 
 function defaultConfig(): HandshakeConfig {
@@ -59,4 +61,13 @@ export function getWallet(config: HandshakeConfig, label?: string): WalletEntry 
 
 export function getApiUrl(config: HandshakeConfig): string {
   return config.apiUrl || process.env.SILK_API_URL || 'https://silkyway.ai';
+}
+
+export function getAgentId(config: HandshakeConfig): string {
+  if (config.agentId) return config.agentId;
+
+  const agentId = randomUUID();
+  config.agentId = agentId;
+  saveConfig(config);
+  return agentId;
 }

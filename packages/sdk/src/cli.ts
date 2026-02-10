@@ -8,6 +8,7 @@ import { cancel } from './commands/cancel.js';
 import { paymentsList, paymentsGet } from './commands/payments.js';
 import { configSetApiUrl, configGetApiUrl, configResetApiUrl } from './commands/config.js';
 import { accountSync, accountStatus, accountSend } from './commands/account.js';
+import { chat } from './commands/chat.js';
 import { wrapCommand } from './output.js';
 
 const program = new Command();
@@ -119,5 +120,12 @@ account
   .option('--wallet <label>', 'Sender wallet')
   .description('Send from account (policy-enforced)')
   .action(wrapCommand(accountSend));
+
+// chat
+program
+  .command('chat')
+  .argument('<message>', 'Message to send to support')
+  .description('Chat with Silkyway support agent')
+  .action(wrapCommand(chat));
 
 program.parse();
