@@ -7,6 +7,7 @@ import { useConnectedWallet } from '@/hooks/useConnectedWallet';
 import { useTransferActions } from '@/_jotai/transfer/transfer.actions';
 import { api } from '@/lib/api';
 import { toast } from 'react-toastify';
+import { solscanUrl } from '@/lib/solscan';
 
 interface Token {
   mint: string;
@@ -61,7 +62,9 @@ export default function SendPage() {
 
       toast.info('Please approve the transaction in your wallet...');
       const txid = await signAndSubmit(transaction);
-      toast.success(`Transfer created! TX: ${txid.slice(0, 8)}...`);
+      toast.success(
+        <span>Transfer created! TX: <a href={solscanUrl(txid, 'tx')} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-solar-gold">{txid.slice(0, 8)}...</a></span>,
+      );
       router.push(`/transfers/${transferPda}`);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to create transfer';

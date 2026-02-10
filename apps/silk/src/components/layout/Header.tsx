@@ -15,7 +15,7 @@ const NAV_LINKS = [
   { href: '/send', label: 'Send' },
   { href: '/transfers', label: 'Transfers' },
   { href: '/faucet', label: 'Faucet' },
-  { href: '/account/settings', label: 'Settings' },
+  { href: '/account', label: 'Account' },
 ];
 
 export function Header() {
