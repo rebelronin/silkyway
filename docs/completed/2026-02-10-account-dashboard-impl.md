@@ -15,12 +15,12 @@
 ## Task 1: Solscan Utility & SolscanLink Component
 
 **Files:**
-- Create: `apps/silk/src/lib/solscan.ts`
-- Create: `apps/silk/src/components/SolscanLink.tsx`
+- Create: `apps/app/src/lib/solscan.ts`
+- Create: `apps/app/src/components/SolscanLink.tsx`
 
 ### Step 1: Create the solscanUrl utility
 
-Create `apps/silk/src/lib/solscan.ts`:
+Create `apps/app/src/lib/solscan.ts`:
 
 ```ts
 const CLUSTER = process.env.NEXT_PUBLIC_SOLANA_CLUSTER;
@@ -35,7 +35,7 @@ export function solscanUrl(address: string, type: 'account' | 'tx'): string {
 
 ### Step 2: Create the SolscanLink component
 
-Create `apps/silk/src/components/SolscanLink.tsx`:
+Create `apps/app/src/components/SolscanLink.tsx`:
 
 ```tsx
 import { solscanUrl } from '@/lib/solscan';
@@ -62,7 +62,7 @@ export function SolscanLink({ address, type }: { address: string; type: 'account
 ### Step 3: Verify build
 
 ```bash
-cd apps/silk && npx next build 2>&1 | tail -5
+cd apps/app && npx next build 2>&1 | tail -5
 ```
 
 Expected: Build succeeds (unused files are fine — they'll be imported in later tasks).
@@ -70,7 +70,7 @@ Expected: Build succeeds (unused files are fine — they'll be imported in later
 ### Step 4: Commit
 
 ```bash
-git add apps/silk/src/lib/solscan.ts apps/silk/src/components/SolscanLink.tsx
+git add apps/app/src/lib/solscan.ts apps/app/src/components/SolscanLink.tsx
 git commit -m "feat: add solscanUrl utility and SolscanLink component"
 ```
 
@@ -81,11 +81,11 @@ git commit -m "feat: add solscanUrl utility and SolscanLink component"
 The withdraw tab needs an action to call `POST /api/account/transfer`. This endpoint already exists in the backend (`apps/backend/src/api/controller/account.controller.ts:124`). The frontend just needs a new action function.
 
 **Files:**
-- Modify: `apps/silk/src/_jotai/account/account.actions.ts`
+- Modify: `apps/app/src/_jotai/account/account.actions.ts`
 
 ### Step 1: Add the action
 
-In `apps/silk/src/_jotai/account/account.actions.ts`, add after the `depositToAccount` callback (after line 23), before the `fetchAccount` callback:
+In `apps/app/src/_jotai/account/account.actions.ts`, add after the `depositToAccount` callback (after line 23), before the `fetchAccount` callback:
 
 ```ts
   const transferFromAccount = useCallback(
@@ -116,7 +116,7 @@ Also add `transferFromAccount` to the return object:
 ### Step 2: Verify build
 
 ```bash
-cd apps/silk && npx next build 2>&1 | tail -5
+cd apps/app && npx next build 2>&1 | tail -5
 ```
 
 Expected: Build succeeds.
@@ -124,7 +124,7 @@ Expected: Build succeeds.
 ### Step 3: Commit
 
 ```bash
-git add apps/silk/src/_jotai/account/account.actions.ts
+git add apps/app/src/_jotai/account/account.actions.ts
 git commit -m "feat: add transferFromAccount action for account withdrawals"
 ```
 
@@ -133,7 +133,7 @@ git commit -m "feat: add transferFromAccount action for account withdrawals"
 ## Task 3: Account Dashboard — Hero Card & Tab Skeleton
 
 **Files:**
-- Create: `apps/silk/src/app/account/page.tsx`
+- Create: `apps/app/src/app/account/page.tsx`
 
 This task creates the full dashboard page. It's the largest single file. The page has:
 - Account loading/redirect logic (ported from settings page)
@@ -143,9 +143,9 @@ This task creates the full dashboard page. It's the largest single file. The pag
 
 ### Step 1: Create the dashboard page
 
-Create `apps/silk/src/app/account/page.tsx` with the complete implementation below.
+Create `apps/app/src/app/account/page.tsx` with the complete implementation below.
 
-**Key patterns ported from the existing settings page (`apps/silk/src/app/account/settings/page.tsx`):**
+**Key patterns ported from the existing settings page (`apps/app/src/app/account/settings/page.tsx`):**
 - `loadAccount` callback with PDA derivation (settings:60-75)
 - Auto-redirect to `/account/setup` when no account found (settings:84-88)
 - `handleTogglePause` (settings:108-121)
@@ -745,7 +745,7 @@ export default function AccountDashboardPage() {
 ### Step 2: Verify build
 
 ```bash
-cd apps/silk && npx next build 2>&1 | tail -5
+cd apps/app && npx next build 2>&1 | tail -5
 ```
 
 Expected: Build succeeds. The page should render at `/account`.
@@ -753,7 +753,7 @@ Expected: Build succeeds. The page should render at `/account`.
 ### Step 3: Commit
 
 ```bash
-git add apps/silk/src/app/account/page.tsx
+git add apps/app/src/app/account/page.tsx
 git commit -m "feat: add account dashboard with hero card, deposit, withdraw, operators, settings tabs"
 ```
 
@@ -762,11 +762,11 @@ git commit -m "feat: add account dashboard with hero card, deposit, withdraw, op
 ## Task 4: Setup Wizard — Solscan Links + "Go to Account" Button
 
 **Files:**
-- Modify: `apps/silk/src/app/account/setup/page.tsx`
+- Modify: `apps/app/src/app/account/setup/page.tsx`
 
 ### Step 1: Add Solscan imports
 
-At the top of `apps/silk/src/app/account/setup/page.tsx`, add after the existing imports (after line 10):
+At the top of `apps/app/src/app/account/setup/page.tsx`, add after the existing imports (after line 10):
 
 ```ts
 import { SolscanLink } from '@/components/SolscanLink';
@@ -894,7 +894,7 @@ Fix whatever is found. Remove console.logs after fixing. If the bug is a race co
 ### Step 7: Verify build
 
 ```bash
-cd apps/silk && npx next build 2>&1 | tail -5
+cd apps/app && npx next build 2>&1 | tail -5
 ```
 
 Expected: Build succeeds.
@@ -902,7 +902,7 @@ Expected: Build succeeds.
 ### Step 8: Commit
 
 ```bash
-git add apps/silk/src/app/account/setup/page.tsx
+git add apps/app/src/app/account/setup/page.tsx
 git commit -m "fix: setup wizard Solscan links, Go to Account button, step transition debug"
 ```
 
@@ -911,11 +911,11 @@ git commit -m "fix: setup wizard Solscan links, Go to Account button, step trans
 ## Task 5: Refactor Transfer Detail Page to Use SolscanLink
 
 **Files:**
-- Modify: `apps/silk/src/app/transfers/[pda]/page.tsx`
+- Modify: `apps/app/src/app/transfers/[pda]/page.tsx`
 
 ### Step 1: Add imports
 
-At the top of `apps/silk/src/app/transfers/[pda]/page.tsx`, add after the existing imports:
+At the top of `apps/app/src/app/transfers/[pda]/page.tsx`, add after the existing imports:
 
 ```ts
 import { SolscanLink } from '@/components/SolscanLink';
@@ -984,13 +984,13 @@ with:
 ### Step 4: Verify build
 
 ```bash
-cd apps/silk && npx next build 2>&1 | tail -5
+cd apps/app && npx next build 2>&1 | tail -5
 ```
 
 ### Step 5: Commit
 
 ```bash
-git add apps/silk/src/app/transfers/\\[pda\\]/page.tsx
+git add apps/app/src/app/transfers/\\[pda\\]/page.tsx
 git commit -m "refactor: transfer detail page uses SolscanLink component"
 ```
 
@@ -999,11 +999,11 @@ git commit -m "refactor: transfer detail page uses SolscanLink component"
 ## Task 6: Refactor Home Page Footer to Use SolscanLink
 
 **Files:**
-- Modify: `apps/silk/src/app/page.tsx`
+- Modify: `apps/app/src/app/page.tsx`
 
 ### Step 1: Add import
 
-At the top of `apps/silk/src/app/page.tsx`, add after the existing imports:
+At the top of `apps/app/src/app/page.tsx`, add after the existing imports:
 
 ```ts
 import { solscanUrl } from '@/lib/solscan';
@@ -1048,13 +1048,13 @@ Note: We keep the full address display here (no truncation) because this is a we
 ### Step 3: Verify build
 
 ```bash
-cd apps/silk && npx next build 2>&1 | tail -5
+cd apps/app && npx next build 2>&1 | tail -5
 ```
 
 ### Step 4: Commit
 
 ```bash
-git add apps/silk/src/app/page.tsx
+git add apps/app/src/app/page.tsx
 git commit -m "refactor: home page footer uses solscanUrl for dynamic cluster"
 ```
 
@@ -1063,11 +1063,11 @@ git commit -m "refactor: home page footer uses solscanUrl for dynamic cluster"
 ## Task 7: Add Solscan Links to Send Page Toast
 
 **Files:**
-- Modify: `apps/silk/src/app/send/page.tsx`
+- Modify: `apps/app/src/app/send/page.tsx`
 
 ### Step 1: Add import
 
-At the top of `apps/silk/src/app/send/page.tsx`, add after the existing imports:
+At the top of `apps/app/src/app/send/page.tsx`, add after the existing imports:
 
 ```ts
 import { solscanUrl } from '@/lib/solscan';
@@ -1089,13 +1089,13 @@ with:
 ### Step 3: Verify build
 
 ```bash
-cd apps/silk && npx next build 2>&1 | tail -5
+cd apps/app && npx next build 2>&1 | tail -5
 ```
 
 ### Step 4: Commit
 
 ```bash
-git add apps/silk/src/app/send/page.tsx
+git add apps/app/src/app/send/page.tsx
 git commit -m "feat: send page toast includes Solscan link for TX ID"
 ```
 
@@ -1104,11 +1104,11 @@ git commit -m "feat: send page toast includes Solscan link for TX ID"
 ## Task 8: Header Nav Update
 
 **Files:**
-- Modify: `apps/silk/src/components/layout/Header.tsx`
+- Modify: `apps/app/src/components/layout/Header.tsx`
 
 ### Step 1: Update the navigation link
 
-In `apps/silk/src/components/layout/Header.tsx`, change the last entry in `NAV_LINKS` (line 18):
+In `apps/app/src/components/layout/Header.tsx`, change the last entry in `NAV_LINKS` (line 18):
 
 Replace:
 ```ts
@@ -1122,13 +1122,13 @@ with:
 ### Step 2: Verify build
 
 ```bash
-cd apps/silk && npx next build 2>&1 | tail -5
+cd apps/app && npx next build 2>&1 | tail -5
 ```
 
 ### Step 3: Commit
 
 ```bash
-git add apps/silk/src/components/layout/Header.tsx
+git add apps/app/src/components/layout/Header.tsx
 git commit -m "feat: header nav Settings → Account, points to /account"
 ```
 
@@ -1137,23 +1137,23 @@ git commit -m "feat: header nav Settings → Account, points to /account"
 ## Task 9: Delete Old Settings Page
 
 **Files:**
-- Delete: `apps/silk/src/app/account/settings/page.tsx`
+- Delete: `apps/app/src/app/account/settings/page.tsx`
 
 ### Step 1: Delete the file
 
 ```bash
-rm apps/silk/src/app/account/settings/page.tsx
+rm apps/app/src/app/account/settings/page.tsx
 ```
 
 If the `settings/` directory is now empty:
 ```bash
-rmdir apps/silk/src/app/account/settings
+rmdir apps/app/src/app/account/settings
 ```
 
 ### Step 2: Verify build
 
 ```bash
-cd apps/silk && npx next build 2>&1 | tail -5
+cd apps/app && npx next build 2>&1 | tail -5
 ```
 
 Expected: Build succeeds. No other file imports from the deleted settings page — it was a standalone route.
@@ -1161,7 +1161,7 @@ Expected: Build succeeds. No other file imports from the deleted settings page �
 ### Step 3: Commit
 
 ```bash
-git add -u apps/silk/src/app/account/settings/
+git add -u apps/app/src/app/account/settings/
 git commit -m "cleanup: delete old /account/settings page, replaced by /account dashboard"
 ```
 
@@ -1172,12 +1172,12 @@ git commit -m "cleanup: delete old /account/settings page, replaced by /account 
 The `solscanUrl` utility reads `NEXT_PUBLIC_SOLANA_CLUSTER`. For devnet usage, this needs to be set.
 
 **Files:**
-- Modify: `apps/silk/.env.local` (or `.env` if it exists)
+- Modify: `apps/app/.env.local` (or `.env` if it exists)
 
 ### Step 1: Check for existing env file
 
 ```bash
-ls -la apps/silk/.env*
+ls -la apps/app/.env*
 ```
 
 ### Step 2: Add the variable
@@ -1193,7 +1193,7 @@ Note: Don't commit `.env.local` — it should be in `.gitignore`. If the project
 ### Step 3: Verify build with env var
 
 ```bash
-cd apps/silk && NEXT_PUBLIC_SOLANA_CLUSTER=devnet npx next build 2>&1 | tail -5
+cd apps/app && NEXT_PUBLIC_SOLANA_CLUSTER=devnet npx next build 2>&1 | tail -5
 ```
 
 ---
@@ -1203,7 +1203,7 @@ cd apps/silk && NEXT_PUBLIC_SOLANA_CLUSTER=devnet npx next build 2>&1 | tail -5
 ### Step 1: Full build
 
 ```bash
-cd apps/silk && npx next build
+cd apps/app && npx next build
 ```
 
 Expected: Build succeeds with zero errors.
@@ -1236,14 +1236,14 @@ Fix anything found during manual testing and commit.
 
 | Task | Action | File |
 |------|--------|------|
-| 1 | Create | `apps/silk/src/lib/solscan.ts` |
-| 1 | Create | `apps/silk/src/components/SolscanLink.tsx` |
-| 2 | Modify | `apps/silk/src/_jotai/account/account.actions.ts` |
-| 3 | Create | `apps/silk/src/app/account/page.tsx` |
-| 4 | Modify | `apps/silk/src/app/account/setup/page.tsx` |
-| 5 | Modify | `apps/silk/src/app/transfers/[pda]/page.tsx` |
-| 6 | Modify | `apps/silk/src/app/page.tsx` |
-| 7 | Modify | `apps/silk/src/app/send/page.tsx` |
-| 8 | Modify | `apps/silk/src/components/layout/Header.tsx` |
-| 9 | Delete | `apps/silk/src/app/account/settings/page.tsx` |
-| 10 | Create/Modify | `apps/silk/.env.local` |
+| 1 | Create | `apps/app/src/lib/solscan.ts` |
+| 1 | Create | `apps/app/src/components/SolscanLink.tsx` |
+| 2 | Modify | `apps/app/src/_jotai/account/account.actions.ts` |
+| 3 | Create | `apps/app/src/app/account/page.tsx` |
+| 4 | Modify | `apps/app/src/app/account/setup/page.tsx` |
+| 5 | Modify | `apps/app/src/app/transfers/[pda]/page.tsx` |
+| 6 | Modify | `apps/app/src/app/page.tsx` |
+| 7 | Modify | `apps/app/src/app/send/page.tsx` |
+| 8 | Modify | `apps/app/src/components/layout/Header.tsx` |
+| 9 | Delete | `apps/app/src/app/account/settings/page.tsx` |
+| 10 | Create/Modify | `apps/app/.env.local` |

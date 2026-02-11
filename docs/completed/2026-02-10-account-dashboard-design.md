@@ -12,7 +12,7 @@ Chunks 2-4 (backend Silkysig service, SDK account commands, frontend setup page)
 
 ## 1. Solscan Utility & Link Component
 
-### `apps/silk/src/lib/solscan.ts`
+### `apps/app/src/lib/solscan.ts`
 
 ```ts
 export function solscanUrl(address: string, type: 'account' | 'tx'): string
@@ -23,7 +23,7 @@ export function solscanUrl(address: string, type: 'account' | 'tx'): string
 - If `mainnet-beta` or absent, no query param
 - Returns `https://solscan.io/{type === 'tx' ? 'tx' : 'account'}/${address}` + cluster param
 
-### `apps/silk/src/components/SolscanLink.tsx`
+### `apps/app/src/components/SolscanLink.tsx`
 
 Small inline component:
 
@@ -55,7 +55,7 @@ Transfer list PDAs stay as internal links to `/transfers/:pda` — no Solscan ne
 
 ## 2. Setup Wizard Fixes
 
-### File: `apps/silk/src/app/account/setup/page.tsx`
+### File: `apps/app/src/app/account/setup/page.tsx`
 
 ### Bug fix: step transition
 
@@ -82,7 +82,7 @@ Button navigates to `/account`. Uses primary gold button styling.
 
 ### Route: `/account`
 
-**New file:** `apps/silk/src/app/account/page.tsx`
+**New file:** `apps/app/src/app/account/page.tsx`
 
 Replaces `/account/settings`. All settings functionality moves here.
 
@@ -166,7 +166,7 @@ Only shows Silk account balance. Wallet balance is visible via the header wallet
 
 ## 4. Navigation Changes
 
-### Header: `apps/silk/src/components/layout/Header.tsx`
+### Header: `apps/app/src/components/layout/Header.tsx`
 
 - Change "Settings" link → "Account"
 - Point to `/account` instead of `/account/settings`
@@ -175,7 +175,7 @@ Only shows Silk account balance. Wallet balance is visible via the header wallet
 
 ## 5. Cleanup
 
-### Delete: `apps/silk/src/app/account/settings/page.tsx`
+### Delete: `apps/app/src/app/account/settings/page.tsx`
 
 All functionality absorbed into `/account` dashboard tabs.
 
@@ -185,19 +185,19 @@ All functionality absorbed into `/account` dashboard tabs.
 
 | Action | File |
 |--------|------|
-| New | `apps/silk/src/lib/solscan.ts` |
-| New | `apps/silk/src/components/SolscanLink.tsx` |
-| New | `apps/silk/src/app/account/page.tsx` |
-| Modify | `apps/silk/src/app/account/setup/page.tsx` |
-| Modify | `apps/silk/src/components/layout/Header.tsx` |
-| Modify | `apps/silk/src/app/send/page.tsx` |
-| Modify | `apps/silk/src/app/transfers/[pda]/page.tsx` |
-| Modify | `apps/silk/src/app/page.tsx` |
-| Delete | `apps/silk/src/app/account/settings/page.tsx` |
+| New | `apps/app/src/lib/solscan.ts` |
+| New | `apps/app/src/components/SolscanLink.tsx` |
+| New | `apps/app/src/app/account/page.tsx` |
+| Modify | `apps/app/src/app/account/setup/page.tsx` |
+| Modify | `apps/app/src/components/layout/Header.tsx` |
+| Modify | `apps/app/src/app/send/page.tsx` |
+| Modify | `apps/app/src/app/transfers/[pda]/page.tsx` |
+| Modify | `apps/app/src/app/page.tsx` |
+| Delete | `apps/app/src/app/account/settings/page.tsx` |
 
 ## Verification
 
-1. `cd apps/silk && npm run build` — compiles without errors
+1. `cd apps/app && npm run build` — compiles without errors
 2. Start backend + frontend
 3. Test setup wizard: full flow through all 4 steps, verify no step gets stuck
 4. Done step: "Go to Account" button navigates to `/account`

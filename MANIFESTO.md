@@ -546,8 +546,8 @@ This is the key UX insight: the demo has a **human-in-the-loop moment** where th
 
 **Step 1: Agent installs skill + SDK**
 ```
-[Agent reads silk.silkyway.ai/skill.md]
-> npm install -g https://silk.silkyway.ai/sdk/silkyway-sdk-0.1.0.tgz
+[Agent reads app.silkyway.ai/skill.md]
+> npm install -g https://app.silkyway.ai/sdk/silkyway-sdk-0.1.0.tgz
 ```
 
 **Step 2: Agent creates a wallet (this becomes its operator key)**
@@ -563,7 +563,7 @@ The skill instructs: "Have your human set up your account."
 
 ```
 Your wallet is ready. To create a Silkyway account, have your human visit:
-https://silk.silkyway.ai/account/setup?agent=Ax7kQ9bR3mFVDg2Thh3AG6sFRPqNrDJ4
+https://app.silkyway.ai/account/setup?agent=Ax7kQ9bR3mFVDg2Thh3AG6sFRPqNrDJ4
 
 They'll connect their wallet, set your spending limits, and fund your account.
 Once done, run: silk account sync
@@ -571,7 +571,7 @@ Once done, run: silk account sync
 
 ### Phase 2: Human Sets Up Account (Web Page)
 
-**Step 4: Human visits `silk.silkyway.ai/account/setup?agent=Ax7kQ9...`**
+**Step 4: Human visits `app.silkyway.ai/account/setup?agent=Ax7kQ9...`**
 
 Clean page:
 - "Set up a Silkyway account for your agent"
@@ -806,7 +806,7 @@ Needs:
 - Choreographed "next steps" messaging
 - (Future: add/remove operators UI, per-operator policy management)
 
-Tech: React + @solana/wallet-adapter + @solana/web3.js. Deployed to `silk.silkyway.ai` (separate from existing root web app).
+Tech: React + @solana/wallet-adapter + @solana/web3.js. Deployed to `app.silkyway.ai` (separate from existing root web app).
 
 ### 8. Mainnet deployment implications
 
@@ -839,7 +839,7 @@ If this runs on mainnet:
     - **Hackathon scope:** Demo uses 1 operator (the agent). Multi-operator is built into the struct from day 1.
 
 2. **Web page: Account setup** (CORE)
-    - `silk.silkyway.ai/account/setup?agent=PUBKEY`
+    - `app.silkyway.ai/account/setup?agent=PUBKEY`
     - Wallet connect (Phantom)
     - Set per-transaction limit
     - Create account (sign tx)

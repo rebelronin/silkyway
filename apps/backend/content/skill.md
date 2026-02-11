@@ -1,10 +1,10 @@
 ---
-name: silkyway
+name: silk
 description: Agent payments on Solana. Policy-controlled accounts with spending limits, plus cancellable escrow transfers. USDC on-chain — non-custodial.
 metadata:
-   author: rebelfi
+   author: silkysquad
    homepage: https://silkyway.ai
-   api_base: https://silkyway.ai/api
+   api_base: https://api.silkyway.ai
 ---
 
 # Silkyway
@@ -35,16 +35,19 @@ Agent (operator) sends payments → on-chain program enforces spending limit
 
 Your human needs to create the account first. You cannot create it yourself.
 
-1. Create your wallet (if you haven't already):
+1. Initialize your CLI (if you haven't already):
    ```bash
-   silk wallet create
+   silk init
    ```
+   This creates your wallet and agent ID. It's idempotent — safe to run multiple times.
 
 2. Share the setup URL with your human — they'll connect their wallet, set your spending limit, and fund the account:
    ```
-   https://silk.silkyway.ai/account/setup?agent=YOUR_WALLET_ADDRESS
+   https://app.silkyway.ai/account/setup?agent=YOUR_WALLET_ADDRESS
    ```
    Replace `YOUR_WALLET_ADDRESS` with the address from `silk wallet list`.
+
+   **Important:** Your human must select the same network (mainnet/devnet) on the setup page as your CLI cluster. The setup page has a cluster toggle in the header. If you're on devnet (`silk config get-cluster`), tell your human to switch to devnet before creating the account.
 
 3. After your human creates the account, sync it:
    ```bash
@@ -74,9 +77,33 @@ Escrow         → [claim_transfer]  → Recipient Wallet
 Escrow         → [cancel_transfer] → Sender Wallet (refund)
 ```
 
+## Cluster Configuration
+
+Silkyway supports both **mainnet** (real USDC) and **devnet** (test USDC). Default is `mainnet-beta`.
+
+```bash
+# Check current cluster
+silk config get-cluster
+
+# Switch to devnet for testing
+silk config set-cluster devnet
+
+# Switch back to mainnet
+silk config set-cluster mainnet-beta
+```
+
+The cluster determines which Solana network and API backend are used:
+
+| Cluster | API Base URL | Network |
+|---------|-------------|---------|
+| `mainnet-beta` | `https://api.silkyway.ai` | Mainnet (real USDC) |
+| `devnet` | `https://devnet-api.silkyway.ai` | Devnet (test USDC) |
+
+Use `devnet` for testing and development; use `mainnet-beta` for real payments.
+
 ## Set up your wallet first
 
-You need a funded wallet before you can use either payment mode. This takes three commands.
+You need a funded wallet before you can use either payment mode.
 
 ### 1. Install the CLI
 
@@ -84,21 +111,24 @@ You need a funded wallet before you can use either payment mode. This takes thre
 npm install -g https://silkyway.ai/sdk/silkyway-sdk-0.1.0.tgz
 ```
 
-### 2. Create a wallet
+### 2. Initialize
 
 ```bash
-silk wallet create
+silk init
 ```
 
-This generates a Solana keypair and saves it at `~/.config/silk/config.json`. Your private key never leaves your machine.
+This creates a default wallet named "main" and generates a unique agent ID. It's idempotent — safe to run multiple times. Your wallet and agent ID are saved at `~/.config/silk/config.json`. Your private key never leaves your machine.
 
 Run `silk wallet list` to see your wallet address — you'll need it to receive payments from other agents.
+
+Alternatively, you can create wallets manually with `silk wallet create [label]`.
 
 ### 3. Fund your wallet
 
 On devnet, use our faucet — it gives you everything you need (0.1 SOL for transaction fees + 100 USDC for payments):
 
 ```bash
+silk config set-cluster devnet
 silk wallet fund
 ```
 
@@ -124,6 +154,7 @@ This locks 10 USDC into on-chain escrow. The recipient claims it with `silk clai
 
 | Command | Description |
 |---------|-------------|
+| `silk init` | Initialize CLI (create default wallet and agent ID if needed) |
 | `silk wallet create [label]` | Create a new wallet (first one is named "main") |
 | `silk wallet list` | List all wallets with addresses |
 | `silk wallet fund [--sol] [--usdc] [--wallet <label>]` | Fund wallet from devnet faucet |
@@ -137,27 +168,27 @@ This locks 10 USDC into on-chain escrow. The recipient claims it with `silk clai
 | `silk account status [--wallet <label>]` | Show account balance, spending limit, and pause state |
 | `silk account send <recipient> <amount> [--memo <text>] [--wallet <label>]` | Send from account (policy-enforced on-chain) |
 | `silk chat <message>` | Ask Silkyway support agent a question |
-| `silk config set-api-url <url>` | Set the API base URL (persisted in config) |
-| `silk config get-api-url` | Show the current API base URL |
-| `silk config reset-api-url` | Reset API URL to default (`https://silkyway.ai`) |
+| `silk config set-cluster <cluster>` | Set cluster (`mainnet-beta` or `devnet`) |
+| `silk config get-cluster` | Show current cluster and API URL |
+| `silk config reset-cluster` | Reset cluster to default (`mainnet-beta`) |
 
 Use `--wallet <label>` on any command to select a non-default wallet.
-
-You can also set the API URL via the `SILK_API_URL` environment variable, which takes precedence over the default but not a configured value.
 
 ## End-to-End Examples
 
 ### Account: set up and send (recommended)
 
 ```bash
-# 1. Create and fund your wallet
-silk wallet create
+# 1. Initialize and fund your wallet (on devnet for testing)
+silk init
+silk config set-cluster devnet
 silk wallet fund
 
 # 2. Share setup URL with your human (replace with your address)
 silk wallet list
 # → main: 7xKXz9BpR3mFVDg2Thh3AG6sFRPqNrDJ4bHUkR8Y7vNx
-# Tell your human: https://silk.silkyway.ai/account/setup?agent=7xKXz9BpR3mFVDg2Thh3AG6sFRPqNrDJ4bHUkR8Y7vNx
+# Tell your human: https://app.silkyway.ai/account/setup?agent=7xKXz9BpR3mFVDg2Thh3AG6sFRPqNrDJ4bHUkR8Y7vNx
+# Remind them to switch to devnet in the header if you're on devnet
 
 # 3. After human creates the account, sync it
 silk account sync
@@ -179,8 +210,8 @@ silk account send Dg2Thh3AG6sFRPqNrDJ4bHUkR8Y7vNx7xKXz9BpR3mFV 10
 ### Escrow: pay, then recipient claims
 
 ```bash
-# Sender: create and fund a wallet
-silk wallet create
+# Sender: initialize and fund a wallet
+silk init
 silk wallet fund
 
 # Sender: pay 25 USDC to a recipient
@@ -257,7 +288,7 @@ When using the CLI (`silk pay`, `silk claim`, etc.), this flow happens automatic
 
 ## API Endpoints
 
-Base URL: `https://silkyway.ai/api`
+Base URL: `https://api.silkyway.ai` (mainnet) or `https://devnet-api.silkyway.ai` (devnet)
 
 All requests use `Content-Type: application/json`.
 

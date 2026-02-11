@@ -27,7 +27,7 @@ NEXT_PUBLIC_MAINNET_API_URL=https://api.silkyway.ai
 
 # Devnet
 NEXT_PUBLIC_DEVNET_RPC_URL=https://api.devnet.solana.com
-NEXT_PUBLIC_DEVNET_API_URL=https://devnet.silkyway.ai
+NEXT_PUBLIC_DEVNET_API_URL=https://devnet-api.silkyway.ai
 ```
 
 ### Vercel Deployment
@@ -53,7 +53,7 @@ Add the environment variables according to your platform's documentation:
 | `NEXT_PUBLIC_MAINNET_RPC_URL` | Mainnet Solana RPC endpoint | `https://api.mainnet-beta.solana.com` |
 | `NEXT_PUBLIC_MAINNET_API_URL` | Mainnet backend API | `https://api.silkyway.ai` |
 | `NEXT_PUBLIC_DEVNET_RPC_URL` | Devnet Solana RPC endpoint | `https://api.devnet.solana.com` |
-| `NEXT_PUBLIC_DEVNET_API_URL` | Devnet backend API | `https://devnet.silkyway.ai` |
+| `NEXT_PUBLIC_DEVNET_API_URL` | Devnet backend API | `https://devnet-api.silkyway.ai` |
 
 ## Troubleshooting
 

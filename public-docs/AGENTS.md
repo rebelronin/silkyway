@@ -27,7 +27,7 @@
 - Bold for UI elements: Click **Settings**
 - Code formatting for commands (`silk pay`), file names (`config.json`), and addresses
 - Use DM Mono font for headings (configured in docs.json)
-- Purple/gold color scheme matches the landing page at silk.silkyway.ai
+- Purple/gold color scheme matches the landing page at app.silkyway.ai
 
 ## Content boundaries
 

@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import Link from 'next/link';
 import { SolscanLink } from '@/components/SolscanLink';
 import { solscanUrl } from '@/lib/solscan';
+import { useCluster } from '@/contexts/ClusterContext';
 
 type Step = 'connect' | 'configure' | 'fund' | 'done';
 
@@ -32,6 +33,7 @@ function AccountSetupContent() {
   const { publicKey, isConnected } = useConnectedWallet();
   const { createAccount, depositToAccount, signAndSubmit } = useAccountActions();
   const { requestFaucet } = useTransferActions();
+  const { cluster } = useCluster();
 
   const [step, setStep] = useState<Step>('connect');
   const [perTxLimit, setPerTxLimit] = useState('5');
@@ -155,7 +157,7 @@ function AccountSetupContent() {
   };
 
   const stepLabels: Record<Step, string> = {
-    connect: 'Connect Wallet',
+    connect: 'Connect & Learn',
     configure: 'Configure Policy',
     fund: 'Fund Account',
     done: 'Complete',
@@ -180,12 +182,18 @@ function AccountSetupContent() {
         className="gradient-border-top border border-nebula-purple/20 p-6"
         style={{ background: 'linear-gradient(180deg, rgba(168, 85, 247, 0.04) 0%, rgba(12, 0, 21, 0.8) 100%)' }}
       >
-        {/* Step 1: Connect Wallet */}
+        {/* Step 1: Connect & Learn */}
         {step === 'connect' && (
           <div className="space-y-5">
             <h2 className="mb-5 text-[0.85rem] font-medium uppercase tracking-[0.2em] text-solar-gold">
-              Connect Your Wallet
+              Connect &amp; Learn
             </h2>
+            <div className="border-l-2 border-nebula-purple bg-nebula-purple/[0.04] p-4 space-y-2">
+              <p className="text-[0.8rem] font-medium text-nebula-purple">How it works</p>
+              <p className="text-[0.75rem] text-star-white/40">You&apos;re creating an on-chain account controlled by your wallet.</p>
+              <p className="text-[0.75rem] text-star-white/40">You&apos;re the owner — full access, always.</p>
+              <p className="text-[0.75rem] text-star-white/40">Your agent becomes an operator with spending limits you define.</p>
+            </div>
             <div className="space-y-1.5">
               <div className="text-[0.7rem] uppercase tracking-[0.15em] text-star-white/50">Agent Address</div>
               <div className="border border-nebula-purple/15 bg-deep-space/80 px-3 py-2.5">
@@ -237,6 +245,12 @@ function AccountSetupContent() {
               </div>
             </div>
 
+            <div className="border-l-2 border-nebula-purple bg-nebula-purple/[0.04] p-4">
+              <p className="text-[0.75rem] text-star-white/40">
+                Your operator can never spend more than this in a single transaction. You (owner) can transfer any amount.
+              </p>
+            </div>
+
             <button
               onClick={handleCreate}
               disabled={isCreating || !usdcMint || limitNum <= 0}
@@ -261,13 +275,15 @@ function AccountSetupContent() {
               </div>
             </div>
 
-            <button
-              onClick={handleGetUsdc}
-              disabled={isFauceting}
-              className="h-10 w-full border border-nebula-purple/30 bg-nebula-purple/10 text-[0.8rem] font-medium uppercase tracking-[0.15em] text-nebula-purple transition-all hover:border-nebula-purple/50 hover:bg-nebula-purple/18 disabled:opacity-30"
-            >
-              {isFauceting ? 'Requesting...' : 'Get Devnet USDC'}
-            </button>
+            {cluster === 'devnet' && (
+              <button
+                onClick={handleGetUsdc}
+                disabled={isFauceting}
+                className="h-10 w-full border border-nebula-purple/30 bg-nebula-purple/10 text-[0.8rem] font-medium uppercase tracking-[0.15em] text-nebula-purple transition-all hover:border-nebula-purple/50 hover:bg-nebula-purple/18 disabled:opacity-30"
+              >
+                {isFauceting ? 'Requesting...' : 'Get Devnet USDC'}
+              </button>
+            )}
 
             <div className="space-y-1.5">
               <label htmlFor="depositAmount" className="block text-[0.7rem] uppercase tracking-[0.15em] text-star-white/50">
@@ -287,6 +303,14 @@ function AccountSetupContent() {
               </div>
             </div>
 
+            {cluster !== 'devnet' && (
+              <div className="border-l-2 border-nebula-purple bg-nebula-purple/[0.04] p-4">
+                <p className="text-[0.75rem] text-star-white/40">
+                  Deposit USDC from your connected wallet.
+                </p>
+              </div>
+            )}
+
             <button
               onClick={handleFund}
               disabled={isFunding || depositNum <= 0}
@@ -295,13 +319,15 @@ function AccountSetupContent() {
               {isFunding ? 'Funding...' : 'Fund Account'}
             </button>
 
-            <button
-              onClick={handleAirdropSol}
-              disabled={isAirdropping}
-              className="h-10 w-full border border-nebula-purple/30 bg-nebula-purple/10 text-[0.8rem] font-medium uppercase tracking-[0.15em] text-nebula-purple transition-all hover:border-nebula-purple/50 hover:bg-nebula-purple/18 disabled:opacity-30"
-            >
-              {isAirdropping ? 'Airdropping...' : 'Airdrop SOL to Agent'}
-            </button>
+            {cluster === 'devnet' && (
+              <button
+                onClick={handleAirdropSol}
+                disabled={isAirdropping}
+                className="h-10 w-full border border-nebula-purple/30 bg-nebula-purple/10 text-[0.8rem] font-medium uppercase tracking-[0.15em] text-nebula-purple transition-all hover:border-nebula-purple/50 hover:bg-nebula-purple/18 disabled:opacity-30"
+              >
+                {isAirdropping ? 'Airdropping...' : 'Airdrop SOL to Agent'}
+              </button>
+            )}
           </div>
         )}
 
@@ -332,6 +358,10 @@ function AccountSetupContent() {
               <div className="flex justify-between text-[0.8rem]">
                 <span className="text-star-white/50">Policy</span>
                 <span className="text-star-white/70">max ${limitNum.toFixed(2)} per transaction</span>
+              </div>
+              <div className="flex justify-between text-[0.8rem]">
+                <span className="text-star-white/50">Network</span>
+                <span className="text-star-white/70">{cluster === 'mainnet-beta' ? 'Mainnet' : 'Devnet'}</span>
               </div>
             </div>
 

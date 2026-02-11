@@ -12,7 +12,7 @@ Silkyway is an **agent payments protocol on Solana**. It lets AI agents make pay
 | `anchor/programs/silkysig/` | Solana program — managed token accounts with operator delegation and spending limits |
 | `anchor/tests/` | Integration tests for both programs (ts-mocha + chai) |
 | `apps/backend/` | NestJS API server — REST API, Solana integration, MikroORM/PostgreSQL |
-| `apps/silk/` | Next.js frontend app |
+| `apps/app/` | Next.js frontend app |
 | `packages/sdk/` | `@silkyway/sdk` — TypeScript SDK + CLI (`silk`) for agent payments |
 | `public-docs/` | Mintlify documentation site |
 | `scripts/` | Setup and build scripts — devnet setup, SDK packaging |
@@ -71,9 +71,9 @@ NestJS server. SWC builder. MikroORM with PostgreSQL.
 - `src/config.ts` — Wallet/config management (`~/.config/silk/config.json`).
 - `SKILL.md` — Agent-facing skill file shipped with the package.
 
-## Frontend (`/apps/silk`)
+## Frontend (`/apps/app`)
 
-Next.js app. See `apps/silk/src/` for source.
+Next.js app. See `apps/app/src/` for source.
 
 ## Gotchas
 

@@ -9,6 +9,7 @@ import { paymentsList, paymentsGet } from './commands/payments.js';
 import { configSetApiUrl, configGetApiUrl, configResetApiUrl, configSetCluster, configGetCluster, configResetCluster } from './commands/config.js';
 import { accountSync, accountStatus, accountSend } from './commands/account.js';
 import { chat } from './commands/chat.js';
+import { init } from './commands/init.js';
 import { wrapCommand } from './output.js';
 
 const program = new Command();
@@ -17,6 +18,12 @@ program
   .description('Silkyway SDK — Agent payments on Solana')
   .version('0.1.0')
   .option('--human', 'Human-readable output');
+
+// init
+program
+  .command('init')
+  .description('Initialize Silk CLI (create default wallet and agent ID)')
+  .action(wrapCommand(init));
 
 // wallet commands
 const wallet = program.command('wallet').description('Manage wallets');

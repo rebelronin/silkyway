@@ -64,7 +64,7 @@ export function getWallet(config: HandshakeConfig, label?: string): WalletEntry 
 
 const CLUSTER_API_URLS: Record<SolanaCluster, string> = {
   'mainnet-beta': 'https://api.silkyway.ai',
-  'devnet': 'https://devnet.silkyway.ai',
+  'devnet': 'https://devnet-api.silkyway.ai',
 };
 
 export function getCluster(config: HandshakeConfig): SolanaCluster {
@@ -75,11 +75,19 @@ export function getApiUrl(config: HandshakeConfig): string {
   return config.apiUrl || process.env.SILK_API_URL || CLUSTER_API_URLS[getCluster(config)];
 }
 
-export function getAgentId(config: HandshakeConfig): string {
-  if (config.agentId) return config.agentId;
-
+export function ensureAgentId(config: HandshakeConfig): { agentId: string; created: boolean } {
+  if (config.agentId) {
+    return { agentId: config.agentId, created: false };
+  }
   const agentId = randomUUID();
   config.agentId = agentId;
-  saveConfig(config);
-  return agentId;
+  return { agentId, created: true };
+}
+
+export function getAgentId(config: HandshakeConfig): string {
+  const result = ensureAgentId(config);
+  if (result.created) {
+    saveConfig(config);
+  }
+  return result.agentId;
 }

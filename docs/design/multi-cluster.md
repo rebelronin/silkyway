@@ -15,7 +15,7 @@ Running both simultaneously means we don't have to choose. Judges see mainnet. A
 ```
                     ┌─────────────────────────┐
                     │     Frontend (Next.js)   │
-                    │   silk.silkyway.ai       │
+                    │   app.silkyway.ai       │
                     │                          │
                     │  ┌───────┬───────┐       │
                     │  │Mainnet│Devnet │ toggle │
@@ -26,7 +26,7 @@ Running both simultaneously means we don't have to choose. Judges see mainnet. A
               ▼                                  ▼
    ┌─────────────────────┐           ┌─────────────────────┐
    │  Backend (NestJS)   │           │  Backend (NestJS)    │
-   │  api.silkyway.ai    │           │  devnet.silkyway.ai  │
+   │  api.silkyway.ai    │           │  devnet-api.silkyway.ai  │
    │  PORT=3000          │           │  PORT=3001           │
    │                     │           │                      │
    │  SOLANA_CLUSTER=    │           │  SOLANA_CLUSTER=     │
@@ -85,7 +85,7 @@ pm2 start ecosystem.config.js
 
 A reverse proxy (nginx/Caddy) routes:
 - `api.silkyway.ai` → `localhost:3000`
-- `devnet.silkyway.ai` → `localhost:3001`
+- `devnet-api.silkyway.ai` → `localhost:3001`
 
 **Database schema updates** use the `updateschema` script:
 ```bash
@@ -106,7 +106,7 @@ The CLI SDK stores cluster preference in `~/.config/silk/config.json`:
 
 The cluster determines which API backend the SDK talks to:
 - `mainnet-beta` → `https://api.silkyway.ai`
-- `devnet` → `https://devnet.silkyway.ai`
+- `devnet` → `https://devnet-api.silkyway.ai`
 
 An explicit `apiUrl` or `SILK_API_URL` env var overrides the cluster-based mapping (useful for local dev).
 
@@ -146,7 +146,7 @@ The frontend is a single Next.js deployment. Cluster switching happens entirely 
 NEXT_PUBLIC_MAINNET_RPC_URL=https://api.mainnet-beta.solana.com
 NEXT_PUBLIC_MAINNET_API_URL=https://api.silkyway.ai
 NEXT_PUBLIC_DEVNET_RPC_URL=https://api.devnet.solana.com
-NEXT_PUBLIC_DEVNET_API_URL=https://devnet.silkyway.ai
+NEXT_PUBLIC_DEVNET_API_URL=https://devnet-api.silkyway.ai
 ```
 
 All four have sensible defaults baked in, so the frontend works even without explicit env vars.
@@ -166,7 +166,7 @@ The Handshake and Silkysig programs use the same program IDs on both clusters. T
 6. When ready for real payments: `silk config set-cluster mainnet-beta`
 
 ### Hackathon judge visiting the site
-1. Opens `silk.silkyway.ai` — defaults to Mainnet (gold pill active)
+1. Opens `app.silkyway.ai` — defaults to Mainnet (gold pill active)
 2. Connects Phantom wallet — sees real USDC balance
 3. Sends a real payment — transaction hits mainnet Solana
 4. Solscan links go to `solscan.io/tx/...` (no cluster param = mainnet)
@@ -191,11 +191,11 @@ The Handshake and Silkysig programs use the same program IDs on both clusters. T
 | `packages/sdk/src/commands/config.ts` | Added `set-cluster`, `get-cluster`, `reset-cluster` commands |
 | `packages/sdk/src/cli.ts` | Registered cluster commands |
 | `packages/sdk/SKILL.md` | Added cluster configuration docs |
-| `apps/silk/src/contexts/ClusterContext.tsx` | New — React context for cluster state |
-| `apps/silk/src/lib/api.ts` | Cluster-aware API client reading from localStorage |
-| `apps/silk/src/lib/solscan.ts` | Reads cluster from localStorage |
-| `apps/silk/src/app/layout.tsx` | Wrapped with `ClusterProvider` |
-| `apps/silk/src/providers/WalletProvider.tsx` | Uses `useCluster()` for RPC endpoint |
-| `apps/silk/src/components/layout/Header.tsx` | Added cluster toggle pill |
-| `apps/silk/.env.sample` | Four cluster-specific env vars |
-| `apps/silk/ENV_SETUP.md` | Updated for new env var scheme |
+| `apps/app/src/contexts/ClusterContext.tsx` | New — React context for cluster state |
+| `apps/app/src/lib/api.ts` | Cluster-aware API client reading from localStorage |
+| `apps/app/src/lib/solscan.ts` | Reads cluster from localStorage |
+| `apps/app/src/app/layout.tsx` | Wrapped with `ClusterProvider` |
+| `apps/app/src/providers/WalletProvider.tsx` | Uses `useCluster()` for RPC endpoint |
+| `apps/app/src/components/layout/Header.tsx` | Added cluster toggle pill |
+| `apps/app/.env.sample` | Four cluster-specific env vars |
+| `apps/app/ENV_SETUP.md` | Updated for new env var scheme |

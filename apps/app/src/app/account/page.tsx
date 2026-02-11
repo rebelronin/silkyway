@@ -9,6 +9,7 @@ import { useTransferActions } from '@/_jotai/transfer/transfer.actions';
 import { SolscanLink } from '@/components/SolscanLink';
 import { solscanUrl } from '@/lib/solscan';
 import { toast } from 'react-toastify';
+import { useCluster } from '@/contexts/ClusterContext';
 
 const PROGRAM_ID = new PublicKey('8MDFar9moBycSXb6gdZgqkiSEGRBRkzxa7JPLddqYcKs');
 
@@ -54,6 +55,7 @@ export default function AccountDashboardPage() {
     signAndSubmit,
   } = useAccountActions();
   const { requestFaucet } = useTransferActions();
+  const { cluster } = useCluster();
 
   const [account, setAccount] = useState<AccountData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -353,13 +355,15 @@ export default function AccountDashboardPage() {
               Deposit
             </h2>
 
-            <button
-              onClick={handleGetUsdc}
-              disabled={faucetLoading}
-              className="h-10 w-full border border-nebula-purple/30 bg-nebula-purple/10 text-[0.8rem] font-medium uppercase tracking-[0.15em] text-nebula-purple transition-all hover:border-nebula-purple/50 hover:bg-nebula-purple/18 disabled:opacity-30"
-            >
-              {faucetLoading ? 'Requesting...' : 'Get Devnet USDC'}
-            </button>
+            {cluster === 'devnet' && (
+              <button
+                onClick={handleGetUsdc}
+                disabled={faucetLoading}
+                className="h-10 w-full border border-nebula-purple/30 bg-nebula-purple/10 text-[0.8rem] font-medium uppercase tracking-[0.15em] text-nebula-purple transition-all hover:border-nebula-purple/50 hover:bg-nebula-purple/18 disabled:opacity-30"
+              >
+                {faucetLoading ? 'Requesting...' : 'Get Devnet USDC'}
+              </button>
+            )}
 
             <div className="space-y-1.5">
               <label htmlFor="depositAmount" className="block text-[0.7rem] uppercase tracking-[0.15em] text-star-white/50">

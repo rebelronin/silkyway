@@ -27,7 +27,7 @@ export default function TransfersPage() {
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-[1200px] items-center justify-center px-8">
         <p className="text-[0.85rem] text-star-white/40">
-          <Link href="/" className="text-solar-gold underline underline-offset-4 hover:text-solar-gold/80">Connect a wallet</Link> to view your transfers.
+          Connect your wallet to send and track payments. No account setup needed.
         </p>
       </div>
     );

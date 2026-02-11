@@ -3,7 +3,7 @@ import type { AxiosInstance } from 'axios';
 
 const CLUSTER_API_URLS: Record<string, string> = {
   'mainnet-beta': process.env.NEXT_PUBLIC_MAINNET_API_URL || 'https://api.silkyway.ai',
-  devnet: process.env.NEXT_PUBLIC_DEVNET_API_URL || 'https://devnet.silkyway.ai',
+  devnet: process.env.NEXT_PUBLIC_DEVNET_API_URL || 'https://devnet-api.silkyway.ai',
 };
 
 const DEV_FALLBACK = 'http://localhost:3000';

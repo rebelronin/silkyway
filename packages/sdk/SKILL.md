@@ -1,10 +1,10 @@
 ---
-name: silkyway
+name: silk
 description: Agent payments on Solana. Policy-controlled accounts with spending limits, plus cancellable escrow transfers. Use when you need to make payments or manage funds.
 metadata:
-  author: rebelfi
+  author: silkysquad
   version: "0.1.0"
-compatibility: Requires Node.js 18+, npm, and internet access to Solana devnet.
+compatibility: Requires Node.js 18+, npm, and internet access to Solana.
 ---
 
 # Silkyway Payments
@@ -35,22 +35,37 @@ silk config set-cluster devnet
 silk config set-cluster mainnet-beta
 ```
 
-The cluster determines which API backend and Solana network are used. Use `devnet` for testing and development; use `mainnet-beta` for real payments.
+The cluster determines which Solana network and API backend are used:
+
+| Cluster | API Base URL | Network |
+|---------|-------------|---------|
+| `mainnet-beta` | `https://api.silkyway.ai` | Mainnet (real USDC) |
+| `devnet` | `https://devnet-api.silkyway.ai` | Devnet (test USDC) |
+
+Use `devnet` for testing and development; use `mainnet-beta` for real payments.
 
 ## First-Time Setup
 
-If you don't have a wallet configured yet:
+If you're using Silk CLI for the first time:
 
 ```bash
-# 1. Create your wallet
-silk wallet create
+# 1. Initialize (creates wallet and agent ID)
+silk init
 
 # 2. Fund it with devnet SOL and USDC (devnet only)
 silk config set-cluster devnet
 silk wallet fund
 ```
 
-Your wallet is saved at `~/.config/silk/config.json`. You only need to do this once.
+The `silk init` command:
+- Creates a default wallet named "main" if no wallets exist
+- Generates a unique agent ID if one doesn't exist
+- Is safe to run multiple times (idempotent)
+- Reports what was created vs what already existed
+
+Your wallet and agent ID are saved at `~/.config/silk/config.json`. You only need to do this once.
+
+Alternatively, you can create wallets manually with `silk wallet create [label]`.
 
 ## Escrow Transfers
 
@@ -142,16 +157,18 @@ A Silkyway account is an on-chain wallet controlled by a **human owner** who del
 
 ### Setup flow
 
-1. Create your wallet (if you haven't already):
+1. Initialize your CLI (if you haven't already):
    ```bash
-   silk wallet create
+   silk init
    ```
 
 2. Share the setup URL with your human (replace with your address from `silk wallet list`):
    ```
-   https://silk.silkyway.ai/account/setup?agent=YOUR_ADDRESS
+   https://app.silkyway.ai/account/setup?agent=YOUR_ADDRESS
    ```
    Your human will connect their wallet, set your spending limit, and fund the account.
+
+   **Important:** Your human must select the same network (mainnet/devnet) on the setup page as your CLI cluster. The setup page has a cluster toggle in the header. If you're on devnet (`silk config get-cluster`), tell your human to switch to devnet before creating the account.
 
 3. After your human creates the account, sync it:
    ```bash
@@ -176,6 +193,7 @@ If `silk account sync` returns "No account found", your human hasn't set up the 
 
 | Command | Description |
 |---------|-------------|
+| `init` | Initialize CLI (create default wallet and agent ID if needed) |
 | `wallet create [label]` | Create a new wallet (first one is named "main") |
 | `wallet list` | List all wallets with addresses |
 | `wallet fund [--sol] [--usdc] [--wallet <label>]` | Fund wallet from devnet faucet |

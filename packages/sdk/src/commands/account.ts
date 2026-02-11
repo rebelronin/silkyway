@@ -91,7 +91,7 @@ export async function accountSync(opts: { wallet?: string; account?: string }) {
       action: 'sync',
       found: 0,
       message: `No account found for wallet "${wallet.label}" (${wallet.address}).`,
-      hint: `Ask your human to set up your account at:\n  https://silk.silkyway.ai/account/setup?agent=${wallet.address}`,
+      hint: `Ask your human to set up your account at:\n  https://app.silkyway.ai/account/setup?agent=${wallet.address}`,
     });
     return;
   }

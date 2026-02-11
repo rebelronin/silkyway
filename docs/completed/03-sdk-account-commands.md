@@ -85,7 +85,7 @@ Flow:
 3. Otherwise, call `GET /api/account/by-operator/:walletAddress`
 4. **When 0 accounts found:**
    - Output: `"No account found for wallet \"<label>\" (<walletAddress>)."`
-   - Output: `"Ask your human to set up your account at:\n  https://silk.silkyway.ai/account/setup?agent=<walletAddress>"`
+   - Output: `"Ask your human to set up your account at:\n  https://app.silkyway.ai/account/setup?agent=<walletAddress>"`
    - Exit (not an error — just informational)
 5. **When 1 account found:**
    - Auto-select. Extract: `pda`, `owner`, `mint`, `mintDecimals`, operator slot info
@@ -180,7 +180,7 @@ Add a new section for account-based payments. Keep existing content intact. Add:
 
 - **Account Setup** section explaining the flow:
   1. `silk wallet create` (existing)
-  2. Share setup URL with your human: `https://silk.silkyway.ai/account/setup?agent=YOUR_ADDRESS`
+  2. Share setup URL with your human: `https://app.silkyway.ai/account/setup?agent=YOUR_ADDRESS`
   3. After human creates account: `silk account sync`
   4. Check status: `silk account status`
   5. Send payments: `silk account send <recipient> <amount>`

@@ -25,7 +25,7 @@ const CLUSTER_CONFIGS: Record<SolanaCluster, ClusterConfig> = {
   },
   devnet: {
     rpcUrl: process.env.NEXT_PUBLIC_DEVNET_RPC_URL || 'https://api.devnet.solana.com',
-    apiUrl: process.env.NEXT_PUBLIC_DEVNET_API_URL || 'https://devnet.silkyway.ai',
+    apiUrl: process.env.NEXT_PUBLIC_DEVNET_API_URL || 'https://devnet-api.silkyway.ai',
   },
 };
 

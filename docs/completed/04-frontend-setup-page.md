@@ -5,15 +5,15 @@
 The backend Account API is live (Chunk 1) and the SDK has account commands (Chunk 2). This chunk builds the human-facing setup page where account owners connect their wallet, create a Silkysig account for their agent, set spending limits, and fund it. This is the "Phase 2: Human Sets Up Account" from the MANIFESTO's Killer Demo.
 
 **Depends on:** Chunk 1 (backend endpoints)
-**Existing frontend:** `apps/silk/` — Next.js app with wallet adapter (Phantom, Solflare), Jotai state, shadcn-style components, space theme.
+**Existing frontend:** `apps/app/` — Next.js app with wallet adapter (Phantom, Solflare), Jotai state, shadcn-style components, space theme.
 
 ---
 
 ## Task 1: Create account action helpers
 
-**New file:** `apps/silk/src/_jotai/account/account.actions.ts`
+**New file:** `apps/app/src/_jotai/account/account.actions.ts`
 
-Helper functions for the setup page to call backend endpoints. Follow the pattern in `apps/silk/src/_jotai/transfer/transfer.actions.ts`.
+Helper functions for the setup page to call backend endpoints. Follow the pattern in `apps/app/src/_jotai/transfer/transfer.actions.ts`.
 
 ### Functions:
 
@@ -38,9 +38,9 @@ Helper functions for the setup page to call backend endpoints. Follow the patter
 
 ## Task 2: Create the setup page
 
-**New file:** `apps/silk/src/app/account/setup/page.tsx`
+**New file:** `apps/app/src/app/account/setup/page.tsx`
 
-A single-page wizard with 4 steps. Reads `?agent=PUBKEY` from URL search params. Uses existing components and styling patterns from the send page (`apps/silk/src/app/send/page.tsx`).
+A single-page wizard with 4 steps. Reads `?agent=PUBKEY` from URL search params. Uses existing components and styling patterns from the send page (`apps/app/src/app/send/page.tsx`).
 
 ### Step State Machine
 
@@ -130,7 +130,7 @@ The setup page is a standalone flow — agents and humans arrive via direct URL.
 
 ## Verification
 
-1. `cd apps/silk && npm run build` — compiles without errors
+1. `cd apps/app && npm run build` — compiles without errors
 2. Start backend and frontend
 3. Full flow test:
    - Visit `localhost:3000/account/setup?agent=SOME_VALID_PUBKEY`
@@ -150,5 +150,5 @@ The setup page is a standalone flow — agents and humans arrive via direct URL.
 
 | Action | File |
 |--------|------|
-| New | `apps/silk/src/app/account/setup/page.tsx` |
-| New | `apps/silk/src/_jotai/account/account.actions.ts` |
+| New | `apps/app/src/app/account/setup/page.tsx` |
+| New | `apps/app/src/_jotai/account/account.actions.ts` |

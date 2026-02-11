@@ -348,7 +348,7 @@ The SDK stores config at `~/.config/silk/config.json`. Key settings:
 
 ```bash
 # Set cluster (determines which API backend to hit)
-silk config set-cluster devnet         # → https://devnet.silkyway.ai
+silk config set-cluster devnet         # → https://devnet-api.silkyway.ai
 silk config set-cluster mainnet-beta   # → https://api.silkyway.ai
 
 # Override API URL directly (for local dev)
@@ -379,7 +379,7 @@ Already done if you ran `npm install` from the repo root (workspaces).
 ### Configure environment
 
 ```bash
-cd apps/silk
+cd apps/app
 cp .env.sample .env.local
 ```
 
@@ -397,12 +397,12 @@ For local dev you typically only need devnet configured. The frontend has sensib
 | `NEXT_PUBLIC_MAINNET_RPC_URL` | Mainnet Solana RPC | `https://api.mainnet-beta.solana.com` |
 | `NEXT_PUBLIC_MAINNET_API_URL` | Mainnet backend | `https://api.silkyway.ai` |
 | `NEXT_PUBLIC_DEVNET_RPC_URL` | Devnet Solana RPC | `https://api.devnet.solana.com` |
-| `NEXT_PUBLIC_DEVNET_API_URL` | Devnet backend | `https://devnet.silkyway.ai` |
+| `NEXT_PUBLIC_DEVNET_API_URL` | Devnet backend | `https://devnet-api.silkyway.ai` |
 
 ### Run in development
 
 ```bash
-cd apps/silk
+cd apps/app
 npm run dev
 ```
 
@@ -411,7 +411,7 @@ Opens on `http://localhost:8000`. The header has a Mainnet/Devnet toggle pill �
 ### Build for production
 
 ```bash
-cd apps/silk
+cd apps/app
 npm run build
 ```
 
@@ -472,7 +472,7 @@ Mainnet runs on port 3000, devnet on port 3001.
 
 Set up nginx or Caddy to route:
 - `api.silkyway.ai` → `localhost:3000`
-- `devnet.silkyway.ai` → `localhost:3001`
+- `devnet-api.silkyway.ai` → `localhost:3001`
 
 Example nginx config:
 
@@ -489,7 +489,7 @@ server {
 }
 
 server {
-    server_name devnet.silkyway.ai;
+    server_name devnet-api.silkyway.ai;
     location / {
         proxy_pass http://127.0.0.1:3001;
         proxy_set_header Host $host;
@@ -500,7 +500,7 @@ server {
 }
 ```
 
-Add SSL with certbot: `sudo certbot --nginx -d api.silkyway.ai -d devnet.silkyway.ai`
+Add SSL with certbot: `sudo certbot --nginx -d api.silkyway.ai -d devnet-api.silkyway.ai`
 
 ### Frontend — Static hosting
 
@@ -603,7 +603,7 @@ silk wallet create
 
 Make sure `ALLOWED_ORIGINS` in the backend `.env` includes your frontend URL:
 ```
-ALLOWED_ORIGINS=http://localhost:8000,https://silk.silkyway.ai
+ALLOWED_ORIGINS=http://localhost:8000,https://app.silkyway.ai
 ```
 
 ### Database schema out of date
