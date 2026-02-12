@@ -11,6 +11,7 @@ import {
 export const ACCOUNT_SEED = 'account';
 
 const DRIFT_PROGRAM = new PublicKey('dRiftyHA39MWEi3m9aunc5MzRF1JYuBsbn6VPcn33UH');
+const USDC_MARKET_INDEX = 0;
 
 export interface OperatorSlotData {
   pubkey: PublicKey;
@@ -156,6 +157,37 @@ export class SilkysigClient {
       tx.add(addOpIx);
     }
 
+    // Always initialize Drift so deposits earn yield
+    const subAccountId = 0;
+    const name = Array.from(Buffer.alloc(32));
+    const driftUser = this.getDriftUserPDA(silkAccountPda, subAccountId);
+    const driftUserStats = this.getDriftUserStatsPDA(silkAccountPda);
+    const driftState = this.getDriftStatePDA();
+    const driftSpotMarketVault = this.getDriftSpotMarketVaultPDA(USDC_MARKET_INDEX);
+    const driftSpotMarket = this.getDriftSpotMarketPDA(USDC_MARKET_INDEX);
+    const driftOracle = await this.fetchSpotMarketOracle(USDC_MARKET_INDEX);
+
+    const initDriftIx = await (this.program.methods as any)
+      .initDriftUser(subAccountId, name, USDC_MARKET_INDEX)
+      .accounts({
+        owner,
+        silkAccount: silkAccountPda,
+        mint,
+        accountTokenAccount,
+        driftUser,
+        driftUserStats,
+        driftState,
+        driftSpotMarketVault,
+        driftSpotMarket,
+        driftOracle,
+        driftProgram: DRIFT_PROGRAM,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        rent: web3.SYSVAR_RENT_PUBKEY,
+        systemProgram: SystemProgram.programId,
+      })
+      .instruction();
+    tx.add(initDriftIx);
+
     const serialized = tx.serialize({ requireAllSignatures: false }).toString('base64');
     return { transaction: serialized, accountPda: silkAccountPda.toBase58() };
   }
@@ -185,7 +217,7 @@ export class SilkysigClient {
 
     // If Drift is initialized, add remaining accounts for Drift deposit
     if (account.driftUser) {
-      const driftAccounts = await this.buildDriftDepositRemainingAccounts(account);
+      const driftAccounts = await this.buildDriftDepositRemainingAccounts(account, accountPda);
       builder.remainingAccounts(driftAccounts);
     }
 
@@ -380,6 +412,20 @@ export class SilkysigClient {
     )[0];
   }
 
+  private getDriftUserPDA(authority: PublicKey, subAccountId: number): PublicKey {
+    return PublicKey.findProgramAddressSync(
+      [Buffer.from('user'), authority.toBuffer(), new BN(subAccountId).toArrayLike(Buffer, 'le', 2)],
+      DRIFT_PROGRAM,
+    )[0];
+  }
+
+  private getDriftUserStatsPDA(authority: PublicKey): PublicKey {
+    return PublicKey.findProgramAddressSync(
+      [Buffer.from('user_stats'), authority.toBuffer()],
+      DRIFT_PROGRAM,
+    )[0];
+  }
+
   private getDriftSignerPDA(): PublicKey {
     return PublicKey.findProgramAddressSync(
       [Buffer.from('drift_signer')],
@@ -398,6 +444,7 @@ export class SilkysigClient {
 
   private async buildDriftDepositRemainingAccounts(
     account: SilkAccountData,
+    accountPda: PublicKey,
   ): Promise<Array<{ pubkey: PublicKey; isSigner: boolean; isWritable: boolean }>> {
     const marketIndex = account.driftMarketIndex!;
     const oracle = await this.fetchSpotMarketOracle(marketIndex);
@@ -406,7 +453,7 @@ export class SilkysigClient {
     return [
       { pubkey: this.getDriftStatePDA(), isSigner: false, isWritable: true },
       { pubkey: account.driftUser!, isSigner: false, isWritable: true },
-      { pubkey: PublicKey.findProgramAddressSync([Buffer.from('user_stats'), account.owner.toBuffer()], DRIFT_PROGRAM)[0], isSigner: false, isWritable: true },
+      { pubkey: this.getDriftUserStatsPDA(accountPda), isSigner: false, isWritable: true },
       { pubkey: this.getDriftSpotMarketVaultPDA(marketIndex), isSigner: false, isWritable: true },
       { pubkey: DRIFT_PROGRAM, isSigner: false, isWritable: false },
       { pubkey: oracle, isSigner: false, isWritable: false },
@@ -425,7 +472,7 @@ export class SilkysigClient {
     return [
       { pubkey: this.getDriftStatePDA(), isSigner: false, isWritable: true },
       { pubkey: account.driftUser!, isSigner: false, isWritable: true },
-      { pubkey: PublicKey.findProgramAddressSync([Buffer.from('user_stats'), account.owner.toBuffer()], DRIFT_PROGRAM)[0], isSigner: false, isWritable: true },
+      { pubkey: this.getDriftUserStatsPDA(accountPda), isSigner: false, isWritable: true },
       { pubkey: this.getDriftSpotMarketVaultPDA(marketIndex), isSigner: false, isWritable: true },
       { pubkey: this.getDriftSignerPDA(), isSigner: false, isWritable: false },
       { pubkey: DRIFT_PROGRAM, isSigner: false, isWritable: false },

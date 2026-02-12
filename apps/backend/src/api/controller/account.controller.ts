@@ -47,6 +47,8 @@ export class AccountController {
         isPaused: r.account.isPaused,
         balance: r.balance,
         operatorSlot,
+        driftUser: r.account.driftUser?.toBase58() ?? null,
+        principalBalance: r.account.principalBalance.toString(),
       };
     });
 
@@ -82,6 +84,9 @@ export class AccountController {
         isPaused: result.account.isPaused,
         balance: result.balance,
         operators,
+        driftUser: result.account.driftUser?.toBase58() ?? null,
+        driftMarketIndex: result.account.driftMarketIndex ?? null,
+        principalBalance: result.account.principalBalance.toString(),
       },
     };
   }

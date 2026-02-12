@@ -16,7 +16,8 @@ import { AccountExplainer } from '@/components/AccountExplainer';
 
 type Step = 'connect' | 'configure' | 'fund' | 'done';
 
-function truncate(s: string) {
+function truncate(s: string | null | undefined) {
+  if (!s) return '';
   return s.length > 12 ? `${s.slice(0, 6)}...${s.slice(-4)}` : s;
 }
 
