@@ -238,7 +238,15 @@ function AccountSetupContent() {
         style={{ background: 'linear-gradient(180deg, rgba(168, 85, 247, 0.04) 0%, rgba(12, 0, 21, 0.8) 100%)' }}
       >
         {/* Step 1: Connect & Learn */}
-        {step === 'connect' && (
+        {step === 'connect' && !agentParam && isConnected && (
+          <div className="space-y-5">
+            <h2 className="mb-5 text-[0.85rem] font-medium uppercase tracking-[0.2em] text-solar-gold">
+              Setting Up
+            </h2>
+            <p className="text-[0.85rem] text-star-white/40">Creating your account...</p>
+          </div>
+        )}
+        {step === 'connect' && agentParam && (
           <div className="space-y-5">
             <h2 className="mb-5 text-[0.85rem] font-medium uppercase tracking-[0.2em] text-solar-gold">
               Connect &amp; Learn
@@ -252,9 +260,19 @@ function AccountSetupContent() {
             <div className="space-y-1.5">
               <div className="text-[0.7rem] uppercase tracking-[0.15em] text-star-white/50">Agent Address</div>
               <div className="border border-nebula-purple/15 bg-deep-space/80 px-3 py-2.5">
-                <p className="text-[0.75rem] text-star-white/50">{truncate(agentParam!)}</p>
+                <p className="text-[0.75rem] text-star-white/50">{truncate(agentParam)}</p>
               </div>
             </div>
+            <p className="text-[0.8rem] text-star-white/40">
+              Connect your wallet using the button in the header to continue.
+            </p>
+          </div>
+        )}
+        {step === 'connect' && !agentParam && !isConnected && (
+          <div className="space-y-5">
+            <h2 className="mb-5 text-[0.85rem] font-medium uppercase tracking-[0.2em] text-solar-gold">
+              Connect Wallet
+            </h2>
             <p className="text-[0.8rem] text-star-white/40">
               Connect your wallet using the button in the header to continue.
             </p>
