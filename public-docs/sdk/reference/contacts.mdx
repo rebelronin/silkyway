@@ -1,0 +1,149 @@
+---
+title: "silk contacts"
+description: "Manage a local address book for quick payments"
+icon: "address-book"
+---
+
+## Overview
+
+The `silk contacts` commands manage a local address book stored at `~/.config/silk/contacts.json`. Contact names can be used anywhere a Solana address is accepted — in `silk pay`, `silk account send`, and other commands.
+
+Names are **case-insensitive** and stored in lowercase.
+
+## Commands
+
+### `silk contacts add`
+
+Add a contact to your address book.
+
+```bash
+silk contacts add <name> <address>
+```
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `name` | Yes | A label for the contact (case-insensitive) |
+| `address` | Yes | Solana wallet address (base58-encoded) |
+
+```bash
+silk contacts add alice 7xKXzM8q4bR3nFVDg2Thh3AG6sFRPqNr
+```
+
+```json
+{ "ok": true, "action": "contact_added", "name": "alice", "address": "7xKXzM8q4bR3nFVDg2Thh3AG6sFRPqNr" }
+```
+
+<Warning>
+  Contact names cannot be valid Solana addresses. The SDK needs to distinguish between names and addresses when resolving recipients.
+</Warning>
+
+---
+
+### `silk contacts remove`
+
+Remove a contact from your address book.
+
+```bash
+silk contacts remove <name>
+```
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `name` | Yes | Name of the contact to remove |
+
+```bash
+silk contacts remove alice
+```
+
+```json
+{ "ok": true, "action": "contact_removed", "name": "alice" }
+```
+
+---
+
+### `silk contacts list`
+
+List all saved contacts.
+
+```bash
+silk contacts list
+```
+
+```json
+{
+  "ok": true,
+  "action": "contacts_list",
+  "contacts": [
+    { "name": "alice", "address": "7xKXzM8q4bR3nFVDg2Thh3AG6sFRPqNr" },
+    { "name": "bob", "address": "Ax7kQ9bR3mFVDg2Thh3AG6sFRPqNrDJ4" }
+  ]
+}
+```
+
+---
+
+### `silk contacts get`
+
+Look up a single contact by name.
+
+```bash
+silk contacts get <name>
+```
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `name` | Yes | Name of the contact to look up |
+
+```bash
+silk contacts get alice
+```
+
+```json
+{ "ok": true, "action": "contact_get", "name": "alice", "address": "7xKXzM8q4bR3nFVDg2Thh3AG6sFRPqNr" }
+```
+
+## Using Contacts in Payments
+
+Anywhere a recipient address is expected, you can use a contact name instead:
+
+```bash
+# Pay using a contact name
+silk pay alice 10 --memo "invoice #42"
+
+# Send from account using a contact name
+silk account send alice 5
+```
+
+The SDK resolves the name to the stored address before making the API call. If the name doesn't match a contact, it's treated as a Solana address.
+
+## Storage
+
+Contacts are stored at `~/.config/silk/contacts.json`:
+
+```json
+{
+  "contacts": [
+    { "name": "alice", "address": "7xKXzM8q4bR3nFVDg2Thh3AG6sFRPqNr" }
+  ]
+}
+```
+
+## Error Codes
+
+| Code | Meaning |
+| ---- | ------- |
+| `CONTACT_EXISTS` | A contact with this name already exists |
+| `CONTACT_NOT_FOUND` | No contact found with this name |
+| `INVALID_CONTACT_NAME` | Name cannot be a valid Solana address |
+| `INVALID_ADDRESS` | Address is not a valid Solana public key |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Payments" icon="arrow-right-arrow-left" href="/sdk/reference/payments">
+    Use contacts in escrow payments.
+  </Card>
+  <Card title="Account Commands" icon="building-columns" href="/sdk/reference/account">
+    Use contacts in account transfers.
+  </Card>
+</CardGroup>

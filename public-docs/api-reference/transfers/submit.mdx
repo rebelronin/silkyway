@@ -1,0 +1,50 @@
+---
+title: "Submit Transaction"
+description: "Submit a signed transaction to Solana"
+---
+
+## `POST /api/tx/submit`
+
+Submits a signed Solana transaction. This is the final step in the [transaction pattern](/api-reference/introduction#transaction-pattern) — after building an unsigned transaction and signing it locally.
+
+### Request Body
+
+<ParamField body="signedTx" type="string" required>
+  Base64-encoded signed Solana transaction.
+</ParamField>
+
+### Response
+
+<ResponseField name="txid" type="string">
+  The Solana transaction signature (base58-encoded).
+</ResponseField>
+
+### Example
+
+```bash
+curl -X POST https://api.silkyway.ai/api/tx/submit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "signedTx": "base64-encoded-signed-transaction..."
+  }'
+```
+
+```json
+{
+  "ok": true,
+  "data": {
+    "txid": "5UfDuXsr3mFVDg2Thh3AG6sFRPqNrDJ4..."
+  }
+}
+```
+
+### Errors
+
+| Code | Meaning |
+| ---- | ------- |
+| `MISSING_TX` | `signedTx` field was not provided |
+| `TX_FAILED` | Transaction failed on Solana (see message for details) |
+
+<Info>
+  If the transaction fails with an on-chain program error, the error message will include the hex error code (e.g., `0x1771`). The SDK maps these to human-readable error codes automatically.
+</Info>

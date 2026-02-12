@@ -1,0 +1,55 @@
+---
+title: "Close Account"
+description: "Close a Silkysig account and sweep remaining tokens"
+---
+
+## `POST /api/account/close`
+
+Builds an unsigned transaction that closes a Silkysig account. Remaining tokens are swept back to the owner. Only the account owner can close the account.
+
+### Request Body
+
+<ParamField body="owner" type="string" required>
+  Account owner's Solana wallet address (must be the signer).
+</ParamField>
+
+<ParamField body="accountPda" type="string" required>
+  The Silkysig account PDA to close.
+</ParamField>
+
+### Response
+
+<ResponseField name="transaction" type="string">
+  Base64-encoded unsigned Solana transaction. Sign with the owner's key and submit via [`POST /api/tx/submit`](/api-reference/transfers/submit).
+</ResponseField>
+
+### Example
+
+```bash
+curl -X POST https://api.silkyway.ai/api/account/close \
+  -H "Content-Type: application/json" \
+  -d '{
+    "owner": "7xKXzM8q4bR3nFVDg2Thh3AG6sFRPqNr",
+    "accountPda": "9aE5kBqR3mFVDg2Thh3AG6sFRPqNrDJ4"
+  }'
+```
+
+```json
+{
+  "ok": true,
+  "data": {
+    "transaction": "base64-encoded-unsigned-transaction..."
+  }
+}
+```
+
+### Errors
+
+| Code | Meaning |
+| ---- | ------- |
+| `Unauthorized` | Signer is not the account owner |
+| `INVALID_PUBKEY` | One of the addresses is not a valid public key |
+
+<Warning>
+  Closing an account is irreversible. All remaining tokens are returned to the owner and the account PDA is deallocated.
+</Warning>

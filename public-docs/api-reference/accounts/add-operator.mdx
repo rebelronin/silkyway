@@ -1,0 +1,63 @@
+---
+title: "Add Operator"
+description: "Add an operator to a Silkysig account"
+---
+
+## `POST /api/account/add-operator`
+
+Builds an unsigned transaction that adds an operator to a Silkysig account. Only the account owner can add operators. Each account supports up to 3 operators.
+
+### Request Body
+
+<ParamField body="owner" type="string" required>
+  Account owner's Solana wallet address (must be the signer).
+</ParamField>
+
+<ParamField body="accountPda" type="string" required>
+  The Silkysig account PDA.
+</ParamField>
+
+<ParamField body="operator" type="string" required>
+  Solana wallet address of the new operator.
+</ParamField>
+
+<ParamField body="perTxLimit" type="number">
+  Per-transaction spending limit in smallest token units (e.g., `10000000` for 10 USDC). Must be >= 0.
+</ParamField>
+
+### Response
+
+<ResponseField name="transaction" type="string">
+  Base64-encoded unsigned Solana transaction. Sign with the owner's key and submit via [`POST /api/tx/submit`](/api-reference/transfers/submit).
+</ResponseField>
+
+### Example
+
+```bash
+curl -X POST https://api.silkyway.ai/api/account/add-operator \
+  -H "Content-Type: application/json" \
+  -d '{
+    "owner": "7xKXzM8q4bR3nFVDg2Thh3AG6sFRPqNr",
+    "accountPda": "9aE5kBqR3mFVDg2Thh3AG6sFRPqNrDJ4",
+    "operator": "Ax7kQ9bR3mFVDg2Thh3AG6sFRPqNrDJ4",
+    "perTxLimit": 10000000
+  }'
+```
+
+```json
+{
+  "ok": true,
+  "data": {
+    "transaction": "base64-encoded-unsigned-transaction..."
+  }
+}
+```
+
+### Errors
+
+| Code | Meaning |
+| ---- | ------- |
+| `Unauthorized` | Signer is not the account owner |
+| `MaxOperatorsReached` | Account already has 3 operators |
+| `INVALID_LIMIT` | `perTxLimit` is negative |
+| `INVALID_PUBKEY` | One of the addresses is not a valid public key |

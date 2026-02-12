@@ -1,0 +1,52 @@
+---
+title: "Decline Transfer"
+description: "Decline an incoming escrow transfer"
+---
+
+## `POST /api/tx/decline-transfer`
+
+Builds an unsigned transaction that declines an escrow transfer. The recipient refuses the transfer and tokens return to the sender. Transfer status becomes `Declined`.
+
+### Request Body
+
+<ParamField body="decliner" type="string" required>
+  Decliner's Solana wallet address. Must be the designated recipient of the transfer.
+</ParamField>
+
+<ParamField body="transferPda" type="string" required>
+  The transfer PDA to decline.
+</ParamField>
+
+### Response
+
+<ResponseField name="transaction" type="string">
+  Base64-encoded unsigned Solana transaction. Sign this locally and submit via [`POST /api/tx/submit`](/api-reference/transfers/submit).
+</ResponseField>
+
+### Example
+
+```bash
+curl -X POST https://api.silkyway.ai/api/tx/decline-transfer \
+  -H "Content-Type: application/json" \
+  -d '{
+    "decliner": "7xKXzM8q4bR3nFVDg2Thh3AG6sFRPqNr",
+    "transferPda": "4bHUkQ9bR3mFVDg2Thh3AG6sFRPqNrDJ4"
+  }'
+```
+
+```json
+{
+  "ok": true,
+  "data": {
+    "transaction": "base64-encoded-unsigned-transaction..."
+  }
+}
+```
+
+### Errors
+
+| Code | Meaning |
+| ---- | ------- |
+| `TransferNotActive` | Transfer is not in `Active` status |
+| `OnlyRecipientCanDecline` | Signer is not the designated recipient |
+| `TransferAlreadyDeclined` | Transfer was already declined |

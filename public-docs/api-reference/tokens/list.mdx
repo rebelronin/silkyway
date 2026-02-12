@@ -1,0 +1,54 @@
+---
+title: "List Tokens"
+description: "Get the list of supported tokens"
+---
+
+## `GET /api/tokens`
+
+Returns the list of tokens supported by the SilkyWay protocol.
+
+### Response
+
+<ResponseField name="tokens" type="array">
+  Array of supported token objects.
+
+  <Expandable title="Token object">
+    <ResponseField name="mint" type="string">
+      Token mint address (base58-encoded).
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      Human-readable token name (e.g., "USD Coin").
+    </ResponseField>
+
+    <ResponseField name="symbol" type="string">
+      Token ticker symbol (e.g., "USDC").
+    </ResponseField>
+
+    <ResponseField name="decimals" type="number">
+      Number of decimal places (e.g., `6` for USDC).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Example
+
+```bash
+curl https://api.silkyway.ai/api/tokens
+```
+
+```json
+{
+  "ok": true,
+  "data": {
+    "tokens": [
+      {
+        "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "name": "USD Coin",
+        "symbol": "USDC",
+        "decimals": 6
+      }
+    ]
+  }
+}
+```

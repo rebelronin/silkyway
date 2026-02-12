@@ -10,35 +10,51 @@ Chain: Transaction rejected. Operator limit: $100/tx.
 Your policies protect your funds — even if your agent doesn't.
 ```
 
+SilkyWay is an agent payments protocol on Solana. It gives AI agents policy-controlled accounts instead of raw wallets — with spending limits enforced on-chain, escrow-based transfers, and yield on idle stablecoins.
+
+## Two Core Primitives
+
+<CardGroup cols={2}>
+  <Card title="Silkysig — Agent Accounts" icon="building-columns">
+    A human creates an on-chain account, sets spending policies, and adds the agent as an operator. The agent spends within bounds — per-transaction limits enforced by the Solana program itself. Up to 3 operators per account, each with independent limits.
+  </Card>
+  <Card title="Handshake — Escrow Payments" icon="handshake">
+    Peer-to-peer token transfers through on-chain escrow. The sender deposits to escrow, the recipient claims via a link or the CLI. Either party can cancel or decline. No counterparty risk.
+  </Card>
+</CardGroup>
+
+## How It Works
+
 <Steps>
-  <Step title="Open an Account">
-    Your agent gets a policy-controlled account on Solana — not just a wallet. You set the spending limits, the chain enforces them.
+  <Step title="Agent creates a wallet">
+    `silk wallet create my-agent` — generates a Solana keypair stored locally. This becomes the agent's operator key.
   </Step>
-  <Step title="Fund It">
-    Deposit any stablecoin (USDC, USDT, PYUSD). Your funds start earning yield immediately.
+  <Step title="Human opens an account">
+    The human visits `app.silkyway.ai`, connects their wallet, sets a per-transaction spending limit, and deposits stablecoins. The agent is added as an operator.
   </Step>
-  <Step title="Let Your Agent Operate">
-    Your agent spends within policy bounds. Per-transaction limits, daily caps — all enforced on-chain. No trust required.
+  <Step title="Agent syncs and operates">
+    `silk account sync` discovers the account. `silk account send` and `silk pay` make payments — all subject to on-chain policy checks. Transactions that exceed limits are rejected by the Solana program.
   </Step>
-  <Step title="Stay in Control">
-    Monitor balances, adjust policies, add or remove operators. The human is always in the kernel seat.
+  <Step title="Human stays in control">
+    Adjust policies, add or remove operators, pause the account, or withdraw — at any time. The owner bypasses all policy checks.
   </Step>
 </Steps>
 
 ## Why SilkyWay
 
-<CardGroup cols={2}>
-  <Card title="On-Chain Safety" icon="shield">
-    Spending policies enforced by the Solana program itself. Not API rate limits. Not agent code. The chain.
+Spending policies are enforced by the Solana program. A prompt injection can't bypass what the chain itself rejects.
+
+## What You Can Build
+
+<CardGroup cols={3}>
+  <Card title="Autonomous Agents" icon="robot">
+    Agents that spend from managed accounts with per-tx and daily limits. Safe to run unattended.
   </Card>
-  <Card title="Yield by Default" icon="chart-line">
-    Every stablecoin earns yield automatically. Idle capital is working capital.
+  <Card title="Agent Commerce" icon="cart-shopping">
+    Agents paying agents through escrow. Invoice, pay, claim — all via CLI or API.
   </Card>
-  <Card title="Multi-Operator" icon="users">
-    One account, up to 3 operators — each with independent policy bounds. AI agent, yield service, payroll bot.
-  </Card>
-  <Card title="Escrow Payments" icon="handshake">
-    Send and receive tokens through secure escrow. Claim or cancel. No counterparty risk.
+  <Card title="Self-Sustaining Agents" icon="infinity">
+    Agents funded with stablecoins that earn yield. Operating costs covered by returns.
   </Card>
 </CardGroup>
 
@@ -49,10 +65,13 @@ Your policies protect your funds — even if your agent doesn't.
     Understand the account model and why agents need more than wallets.
   </Card>
   <Card title="Quickstart" icon="rocket" href="/guides/quickstart">
-    Set up your first agent account in under 5 minutes.
+    Create a wallet, set up an account, and make your first payment.
   </Card>
   <Card title="SDK Reference" icon="code" href="/sdk/introduction">
-    Install the SDK and start building with the `silk` CLI.
+    Install the `silk` CLI and explore all commands.
+  </Card>
+  <Card title="How It Works" icon="diagram-project" href="/guides/how-it-works">
+    Architecture deep dive — accounts, operators, escrow, and policies.
   </Card>
   <Card title="API Reference" icon="terminal" href="/api-reference/introduction">
     Integrate directly with the SilkyWay REST API.

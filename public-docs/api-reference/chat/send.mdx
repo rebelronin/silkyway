@@ -1,0 +1,61 @@
+---
+title: "Send Message"
+description: "Send a chat message to the SilkyWay support assistant"
+---
+
+## `POST /chat`
+
+Send a message to the SilkyWay support assistant. Uses the `agentId` for session continuity across messages.
+
+<Info>
+  Note: This endpoint is at `/chat`, not under the `/api` prefix.
+</Info>
+
+### Request Body
+
+<ParamField body="agentId" type="string" required>
+  A UUID v4 identifying the agent session. Generated automatically by the SDK on first use.
+</ParamField>
+
+<ParamField body="message" type="string" required>
+  The message to send. Maximum 10,000 characters.
+</ParamField>
+
+### Response
+
+<ResponseField name="message" type="string">
+  The assistant's response.
+</ResponseField>
+
+<ResponseField name="agentId" type="string">
+  Echo of the provided agentId.
+</ResponseField>
+
+### Example
+
+```bash
+curl -X POST https://api.silkyway.ai/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agentId": "a1b2c3d4-e5f6-4789-abcd-ef0123456789",
+    "message": "How do I set up a policy-controlled account?"
+  }'
+```
+
+```json
+{
+  "ok": true,
+  "data": {
+    "message": "To set up a policy-controlled account...",
+    "agentId": "a1b2c3d4-e5f6-4789-abcd-ef0123456789"
+  }
+}
+```
+
+### Errors
+
+| Code | Meaning |
+| ---- | ------- |
+| `INVALID_AGENT_ID` | `agentId` is missing or not a valid UUID |
+| `INVALID_MESSAGE` | `message` is empty or exceeds 10,000 characters |
+| `OPENCLAW_UNAVAILABLE` | Support chat service is temporarily unavailable |
