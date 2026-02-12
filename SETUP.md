@@ -50,7 +50,7 @@ silkyway/
 │   ├── backend/             # NestJS API server
 │   └── silk/                # Next.js frontend
 ├── packages/
-│   └── sdk/                 # @silkyway/sdk — CLI + TypeScript client
+│   └── sdk/                 # Legacy — migrated to github.com/silkysquad/silk
 ├── scripts/
 │   ├── setup-devnet.ts      # One-time devnet bootstrapper
 │   ├── pack-sdk.sh          # Build + package SDK tarball
@@ -314,32 +314,12 @@ The script will skip the mint creation (it already exists) and just create the p
 
 ## 5. SDK Setup
 
-### Build
+The SDK has been migrated to a dedicated repository: **[github.com/silkysquad/silk](https://github.com/silkysquad/silk)**
+
+Published to npm as `@silkysquad/silk`. Install it globally:
 
 ```bash
-cd packages/sdk
-npm run build
-```
-
-### Install globally (for local testing)
-
-```bash
-cd packages/sdk
-npm install -g .
-```
-
-Now `silk` is available as a CLI command.
-
-### Package for distribution
-
-```bash
-./scripts/pack-sdk.sh
-```
-
-This builds the SDK, creates a `.tgz` tarball, and places it at `apps/backend/public/sdk/silkyway-sdk-0.1.0.tgz`. The backend serves static files from `public/`, so the SDK becomes installable via:
-
-```bash
-npm install -g https://your-domain.com/sdk/silkyway-sdk-0.1.0.tgz
+npm install -g @silkysquad/silk
 ```
 
 ### SDK configuration
@@ -351,12 +331,8 @@ The SDK stores config at `~/.config/silk/config.json`. Key settings:
 silk config set-cluster devnet         # → https://devnet-api.silkyway.ai
 silk config set-cluster mainnet-beta   # → https://api.silkyway.ai
 
-# Override API URL directly (for local dev)
-silk config set-api-url http://localhost:3000
-
 # Check current config
 silk config get-cluster
-silk config get-api-url
 ```
 
 ### Quick test
@@ -367,6 +343,8 @@ silk config set-cluster devnet
 silk wallet fund        # gets devnet SOL + test USDC
 silk balance
 ```
+
+For SDK development, clone the standalone repo: `git clone https://github.com/silkysquad/silk`
 
 ---
 
@@ -511,7 +489,7 @@ Set all four `NEXT_PUBLIC_*` env vars in your hosting platform. The client-side 
 
 ### SDK distribution
 
-After `./scripts/pack-sdk.sh`, the tarball is at `apps/backend/public/sdk/`. Since the backend serves `public/` as static files, it's automatically available at `https://api.silkyway.ai/sdk/silkyway-sdk-0.1.0.tgz` (or the devnet equivalent).
+The SDK is published to npm as `@silkysquad/silk` from the [standalone repo](https://github.com/silkysquad/silk). Install with `npm install -g @silkysquad/silk`.
 
 ---
 
@@ -543,14 +521,6 @@ npx ts-node scripts/setup-devnet.ts
 | `SYSTEM_SIGNER_PRIVATE_KEY` | Path to keypair JSON | `~/.config/solana/id.json` |
 | `HANDSHAKE_PROGRAM_ID` | Handshake program | `HZ8paEkYZ2hKBwHoVk23doSLEad9K5duASRTGaYogmfg` |
 | `HANDSHAKE_POOL_NAME` | Pool name | `usdc-devnet` |
-
-### `scripts/pack-sdk.sh`
-
-Builds the SDK and packages it as a `.tgz` tarball in `apps/backend/public/sdk/`.
-
-```bash
-./scripts/pack-sdk.sh
-```
 
 ### `apps/backend/updateschema`
 

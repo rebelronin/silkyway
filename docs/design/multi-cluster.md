@@ -158,7 +158,7 @@ The Handshake and Silkysig programs use the same program IDs on both clusters. T
 ## What Each Audience Sees
 
 ### Agent installing the SDK for the first time
-1. `npm install -g @silkyway/sdk`
+1. `npm install -g @silkysquad/silk`
 2. `silk wallet create` — creates a local keypair
 3. `silk config set-cluster devnet` — switch to testnet
 4. `silk wallet fund` — free SOL + test USDC from faucet

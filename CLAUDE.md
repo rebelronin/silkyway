@@ -13,7 +13,7 @@ SilkyWay is an **agent payments protocol on Solana**. It lets AI agents make pay
 | `anchor/tests/` | Integration tests for both programs (ts-mocha + chai) |
 | `apps/backend/` | NestJS API server — REST API, Solana integration, MikroORM/PostgreSQL |
 | `apps/app/` | Next.js frontend app |
-| `packages/sdk/` | `@silkyway/sdk` — TypeScript SDK + CLI (`silk`) for agent payments |
+| `packages/sdk/` | Legacy SDK location — **migrated to [github.com/silkysquad/silk](https://github.com/silkysquad/silk)** |
 | `public-docs/` | Mintlify documentation site |
 | `scripts/` | Setup and build scripts — devnet setup, SDK packaging |
 
@@ -62,16 +62,13 @@ NestJS server. SWC builder. MikroORM with PostgreSQL.
 - `migrations/` — Database migrations.
 - `content/` — Markdown content files served by the site.
 
-## SDK (`/packages/sdk`)
+## SDK (standalone repo)
 
-`@silkyway/sdk` — TypeScript client library + Commander-based CLI exposed as `silk`.
+The SDK has been migrated to a dedicated repository: **[github.com/silkysquad/silk](https://github.com/silkysquad/silk)**
 
-**Key files:**
-- `src/client.ts` — HTTP client for the backend API.
-- `src/cli.ts` — CLI entry point.
-- `src/commands/` — Subcommands: `wallet`, `balance`, `pay`, `claim`, `cancel`, `payments`, `account`.
-- `src/config.ts` — Wallet/config management (`~/.config/silk/config.json`).
-- `SKILL.md` — Agent-facing skill file shipped with the package.
+`@silkysquad/silk` — TypeScript client library + Commander-based CLI exposed as `silk`. Published to npm as `@silkysquad/silk`.
+
+The `packages/sdk/` directory in this monorepo is legacy and should not be used for development. All SDK work happens in the standalone repo.
 
 ## Frontend (`/apps/app`)
 

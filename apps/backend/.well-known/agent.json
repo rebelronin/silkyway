@@ -1,6 +1,6 @@
 {
   "name": "SilkyWay",
-  "description": "Programmable USDC escrow payments on Solana for autonomous agents. Send, claim, and cancel time-locked payments with zero-config onboarding via CLI or HTTP API.",
+  "description": "Programmable stablecoin escrow payments on Solana for autonomous agents. Send, claim, and cancel time-locked payments with zero-config onboarding via CLI or HTTP API.",
   "version": "0.1.0",
   "content_type": "documentation",
   "capabilities": [
@@ -19,7 +19,7 @@
     "changelog": "/CHANGELOG.md"
   },
   "api": {
-    "base_url": "https://silkyway.ai/api",
+    "base_url": "https://api.silkyway.ai",
     "endpoints": {
       "create_transfer": "POST /api/tx/create-transfer",
       "claim_transfer": "POST /api/tx/claim-transfer",

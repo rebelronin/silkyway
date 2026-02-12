@@ -215,7 +215,7 @@ content/
 
 ## SDK — TypeScript Client + CLI
 
-The SDK (`@silkyway/sdk`) provides a programmatic API and a CLI (`silk`) for interacting with Handshake through the site backend.
+The SDK (`@silkysquad/silk`) provides a programmatic API and a CLI (`silk`) for interacting with Handshake through the site backend.
 
 ### Architecture
 

@@ -13,7 +13,7 @@ Add claim link generation to the SDK `pay` command and improve the frontend tran
 Add a function that constructs the claim URL from a transferPda and the current cluster config.
 
 ```typescript
-const APP_BASE_URL = 'https://app.silkyway.so';
+const APP_BASE_URL = 'https://app.silkyway.ai';
 
 export function getClaimUrl(config: SilkConfig, transferPda: string): string {
   const base = `${APP_BASE_URL}/transfers/${transferPda}`;

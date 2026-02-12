@@ -93,7 +93,7 @@ The backend never sees your private key. It only builds the transaction structur
 
 **Backend API** (NestJS) — builds unsigned transactions, accepts signed submissions, indexes on-chain state to PostgreSQL. Never handles private keys.
 
-**SDK + CLI** (`@silkyway/sdk`) — TypeScript client with Commander.js CLI. Handles local signing, multi-wallet support, JSON output for agents, `--human` flag for humans.
+**SDK + CLI** (`@silkysquad/silk`) — TypeScript client with Commander.js CLI. Handles local signing, multi-wallet support, JSON output for agents, `--human` flag for humans.
 
 ## Technical details
 

@@ -1,14 +1,14 @@
 ---
 name: silk
-version: 0.1.0
-description: Agent payments on Solana. Send and receive USDC with cancellable escrow transfers. Optional on-chain accounts with policy-enforced spending limits for human-delegated automation.
+version: 1.0.4
+description: Agent banking and payments on Solana. Send and receive stablecoins with cancellable escrow transfers. Optional on-chain accounts with policy-enforced spending limits for human-delegated automation.
 homepage: https://silkyway.ai
 metadata: {"category":"payments","api_base":"https://api.silkyway.ai","author":"silkysquad","openclaw":{"requires":{"bins":["silk"]},"install":[{"id":"silk-npm","kind":"node","label":"Silk CLI","package":"@silkysquad/silk"}]}}
 ---
 
 # SilkyWay
 
-Agent payments on Solana. Send and receive USDC — non-custodial, on-chain.
+Agent banking and payments on Solana. Send and receive stablecoins — non-custodial, on-chain.
 
 ## Install
 
@@ -72,7 +72,7 @@ The output includes a **claim link** (`claimUrl`) — a URL you can share with t
 silk pay 7xKXz9BpR3mFVDg2Thh3AG6sFRPqNrDJ4bHUkR8Y7vNx 10 --memo "Payment for code review"
 
 # Output includes claimUrl — share it with the recipient
-# Example: https://app.silkyway.so/transfers/9aE5kBqRvF3...?cluster=devnet
+# Example: https://app.silkyway.ai/transfers/9aE5kBqRvF3...?cluster=devnet
 
 # Check your balance
 silk balance

@@ -15,8 +15,8 @@ export class WellKnownController {
     return {
       name: 'SilkyWay',
       description:
-        'Programmable USDC escrow payments on Solana for autonomous agents. Send, claim, and cancel time-locked payments with zero-config onboarding via CLI or HTTP API.',
-      version: '0.1.0',
+        'Programmable stablecoin escrow payments on Solana for autonomous agents. Send, claim, and cancel time-locked payments with zero-config onboarding via CLI or HTTP API.',
+      version: '1.0.4',
       content_type: 'documentation',
       capabilities: [
         'usdc-payments',
@@ -34,7 +34,7 @@ export class WellKnownController {
         changelog: '/CHANGELOG.md',
       },
       api: {
-        base_url: 'https://silkyway.ai/api',
+        base_url: 'https://api.silkyway.ai',
         endpoints: {
           create_transfer: 'POST /api/tx/create-transfer',
           claim_transfer: 'POST /api/tx/claim-transfer',
