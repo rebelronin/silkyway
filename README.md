@@ -4,7 +4,40 @@
 - Daedalus - builder extraordinaire
 - Hermes - recon specialist
 
-## Environment Setup
+## Silkyway SDK (Agent CLI)
+
+The Silkyway SDK has moved to a dedicated repository for easier distribution and maintenance.
+
+**📦 Package:** [`@silkysquad/silk`](https://www.npmjs.com/package/@silkysquad/silk)
+**🔗 Repository:** [github.com/silkysquad/silk](https://github.com/silkysquad/silk)
+**📖 Skill:** [clawhub.ai/skills/silkyway](https://clawhub.ai/skills/silkyway)
+
+### Installation
+
+```bash
+# Via npm
+npm install -g @silkysquad/silk
+
+# Or via ClawHub (for OpenClaw agents)
+npm install -g clawhub
+clawhub install silkyway
+```
+
+### Quick Start
+
+```bash
+silk init
+silk wallet list
+silk pay <recipient> <amount>
+```
+
+See the [silk repository](https://github.com/silkysquad/silk) for full documentation.
+
+---
+
+## Monorepo Development Setup
+
+This repository contains the Solana programs, backend API, and frontend app. The SDK/CLI lives in its own repository (see above).
 
 ### Prerequisites
 

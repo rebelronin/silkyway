@@ -48,8 +48,8 @@ export class WellKnownController {
         },
       },
       sdk: {
-        package: '@silkyway/sdk',
-        install: 'npm install -g https://silkyway.ai/sdk/silkyway-sdk-0.1.0.tgz',
+        package: '@silkysquad/silk',
+        install: 'npm install -g @silkysquad/silk',
         cli: 'silk',
       },
       network: this.network,

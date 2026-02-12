@@ -9,7 +9,7 @@ import { api } from '@/lib/api';
 import { toast } from 'react-toastify';
 import { SolscanLink } from '@/components/SolscanLink';
 import { solscanUrl } from '@/lib/solscan';
-import type { TransferInfo } from '@silkyway/sdk/dist/transfers.js';
+import type { TransferInfo } from '@silkysquad/silk/dist/transfers.js';
 
 function formatAmount(raw: string | number, decimals: number) {
   return (Number(raw) / 10 ** decimals).toFixed(2);

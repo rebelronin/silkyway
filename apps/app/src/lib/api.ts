@@ -1,4 +1,4 @@
-import { createHttpClient } from '@silkyway/sdk/dist/client.js';
+import { createHttpClient } from '@silkysquad/silk/dist/client.js';
 import type { AxiosInstance } from 'axios';
 
 const CLUSTER_API_URLS: Record<string, string> = {

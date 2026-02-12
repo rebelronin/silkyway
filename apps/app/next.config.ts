@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['@silkyway/sdk'],
+  transpilePackages: ['@silkysquad/silk'],
   turbopack: {},
 };
 

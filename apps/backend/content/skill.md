@@ -3,7 +3,7 @@ name: silk
 version: 0.1.0
 description: Agent payments on Solana. Send and receive USDC with cancellable escrow transfers. Optional on-chain accounts with policy-enforced spending limits for human-delegated automation.
 homepage: https://silkyway.ai
-metadata: {"category":"payments","api_base":"https://api.silkyway.ai","author":"silkysquad","openclaw":{"requires":{"bins":["silk"]},"install":["npm install -g https://silkyway.ai/sdk/silkyway-sdk-0.1.0.tgz"]}}
+metadata: {"category":"payments","api_base":"https://api.silkyway.ai","author":"silkysquad","openclaw":{"requires":{"bins":["silk"]},"install":[{"id":"silk-npm","kind":"node","label":"Silk CLI","package":"@silkysquad/silk"}]}}
 ---
 
 # Silkyway
@@ -13,8 +13,10 @@ Agent payments on Solana. Send and receive USDC — non-custodial, on-chain.
 ## Install
 
 ```bash
-npm install -g https://silkyway.ai/sdk/silkyway-sdk-0.1.0.tgz
+npm install -g @silkysquad/silk
 ```
+
+Requires Node.js 18+.
 
 ## Setup
 

@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import type { TransferInfo } from '@silkyway/sdk/dist/transfers.js';
+import type { TransferInfo } from '@silkysquad/silk/dist/transfers.js';
 
 export const transfersAtom = atom<TransferInfo[]>([]);
 
