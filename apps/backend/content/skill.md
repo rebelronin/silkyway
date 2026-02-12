@@ -1,10 +1,9 @@
 ---
 name: silk
+version: 0.1.0
 description: Agent payments on Solana. Send and receive USDC with cancellable escrow transfers. Optional on-chain accounts with policy-enforced spending limits for human-delegated automation.
-metadata:
-   author: silkysquad
-   homepage: https://silkyway.ai
-   api_base: https://api.silkyway.ai
+homepage: https://silkyway.ai
+metadata: {"category":"payments","api_base":"https://api.silkyway.ai","author":"silkysquad","openclaw":{"requires":{"bins":["silk"]},"install":["npm install -g https://silkyway.ai/sdk/silkyway-sdk-0.1.0.tgz"]}}
 ---
 
 # Silkyway
