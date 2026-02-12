@@ -131,7 +131,7 @@ async function createPool() {
 
   // Summary
   console.log(`\n${'='.repeat(60)}`);
-  console.log(`Done! Pool "${POOL_NAME}" is live on ${RPC_URL.includes('devnet') ? 'DevNet' : 'MainNet'}.`);
+  console.log(`Done! Pool "${POOL_NAME}" is live on ${RPC_URL.includes('devnet') ? 'devnet' : 'mainnet'}.`);
   console.log(`\nAdd to .env:`);
   console.log(`HANDSHAKE_POOL_NAME=${POOL_NAME}`);
   console.log(`USDC_MINT_ADDRESS=${MINT_ADDRESS}`);

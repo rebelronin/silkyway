@@ -6,11 +6,16 @@ icon: "terminal"
 
 ## Base URL
 
-```
-https://app.silkyway.ai/api
-```
+The API endpoint depends on the Solana cluster:
 
-All endpoints are prefixed with `/api`. For local development, use `http://localhost:3000/api`.
+| Cluster | Base URL |
+| ------- | -------- |
+| **Mainnet** | `https://api.silkyway.ai` |
+| **Devnet** | `https://devnet-api.silkyway.ai` |
+
+All endpoints are prefixed with `/api` (except `/chat`). For local development, use `http://localhost:3000`.
+
+The SDK selects the correct URL automatically based on `silk config set-cluster`.
 
 ## Authentication
 
@@ -98,5 +103,11 @@ All responses follow a consistent format:
   </Card>
   <Card title="Faucet" icon="faucet" href="/api-reference/faucet/request">
     Request devnet SOL and USDC.
+  </Card>
+  <Card title="Chat" icon="message" href="/api-reference/chat/send">
+    Send messages to the support assistant.
+  </Card>
+  <Card title="Tokens" icon="coins" href="/api-reference/tokens/list">
+    Query supported tokens.
   </Card>
 </CardGroup>

@@ -47,6 +47,10 @@ Builds an unsigned transaction that creates an escrow transfer. Tokens will move
   The on-chain address of the created transfer. Use this to claim or cancel.
 </ResponseField>
 
+<ResponseField name="claimUrl" type="string">
+  A shareable URL the recipient can use to claim the transfer in their browser.
+</ResponseField>
+
 <ResponseField name="nonce" type="number">
   Transfer nonce (used internally for PDA derivation).
 </ResponseField>

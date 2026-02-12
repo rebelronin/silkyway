@@ -10,6 +10,56 @@ The `silk config` commands manage the SDK's configuration, stored at `~/.config/
 
 ## Commands
 
+### `silk config set-cluster`
+
+Set the Solana cluster. This determines which API endpoint the SDK uses.
+
+```bash
+silk config set-cluster <cluster>
+```
+
+| Parameter | Required | Description |
+| --------- | -------- | ----------- |
+| `cluster` | Yes | `mainnet-beta` or `devnet` |
+
+```bash
+silk config set-cluster devnet
+```
+
+```json
+{ "ok": true, "cluster": "devnet", "apiUrl": "https://devnet-api.silkyway.ai" }
+```
+
+---
+
+### `silk config get-cluster`
+
+Display the current cluster and its associated API endpoint.
+
+```bash
+silk config get-cluster
+```
+
+```json
+{ "ok": true, "cluster": "mainnet-beta", "apiUrl": "https://api.silkyway.ai" }
+```
+
+---
+
+### `silk config reset-cluster`
+
+Reset the cluster to the default (`mainnet-beta`).
+
+```bash
+silk config reset-cluster
+```
+
+```json
+{ "ok": true, "cluster": "mainnet-beta", "apiUrl": "https://api.silkyway.ai", "message": "Reset to default (mainnet-beta)" }
+```
+
+---
+
 ### `silk config get-api-url`
 
 Display the current API endpoint.
@@ -68,7 +118,9 @@ The full config file at `~/.config/silk/config.json`:
     }
   ],
   "defaultWallet": "my-agent",
-  "apiUrl": "https://app.silkyway.ai",
+  "cluster": "mainnet-beta",
+  "apiUrl": "https://api.silkyway.ai",
+  "agentId": "a1b2c3d4-e5f6-4789-abcd-ef0123456789",
   "account": {
     "pda": "9aE5kBqR...",
     "owner": "7xKXz...",
@@ -85,7 +137,9 @@ The full config file at `~/.config/silk/config.json`:
 | ----- | ----------- |
 | `wallets` | Array of locally stored Solana keypairs |
 | `defaultWallet` | Label of the wallet used by default |
-| `apiUrl` | Backend API endpoint |
+| `cluster` | Solana cluster — `mainnet-beta` (default) or `devnet` |
+| `apiUrl` | Backend API endpoint (overrides cluster-based URL if set) |
+| `agentId` | Auto-generated UUID for chat session continuity |
 | `account` | Synced Silkysig account info (populated by `silk account sync`) |
 | `account.pda` | On-chain account address |
 | `account.owner` | Human owner's public key |

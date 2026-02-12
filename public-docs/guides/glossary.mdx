@@ -28,7 +28,16 @@ icon: "book"
 | **Claim** | The recipient taking ownership of escrowed tokens. Moves tokens from pool to recipient. |
 | **Cancel** | The sender reclaiming escrowed tokens before the recipient claims. Returns tokens to sender. |
 | **Claim Window** | Optional time bounds on a transfer — `claimable_after` (earliest claim time) and `claimable_until` (deadline). |
+| **Claim Link** | A shareable URL (`https://app.silkyway.so/transfers/<pda>`) that lets the recipient claim a transfer in their browser. Returned by `silk pay`. |
+| **Decline** | The recipient refusing an incoming transfer. Tokens return to the sender. Status becomes `Declined`. |
 | **Memo** | An optional text message attached to a transfer. |
+
+## SDK Concepts
+
+| Term | Definition |
+| ---- | ---------- |
+| **Address Book / Contacts** | A local store (`~/.config/silk/contacts.json`) of name→address mappings. Contact names can be used in place of Solana addresses in `silk pay` and `silk account send`. |
+| **Cluster** | The Solana network the SDK targets — `mainnet-beta` (default) or `devnet`. Set via `silk config set-cluster`. Determines which API endpoint is used. |
 
 ## Technical Concepts
 

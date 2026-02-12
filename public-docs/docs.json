@@ -10,11 +10,7 @@
   "colors": {
     "primary": "#A855F7",
     "light": "#C084FC",
-    "dark": "#7C3AED",
-    "background": {
-      "dark": "#0c0015",
-      "light": "#faf5ff"
-    }
+    "dark": "#7C3AED"
   },
   "fonts": {
     "heading": { "family": "DM Mono", "weight": 500 },
@@ -94,6 +90,8 @@
               "sdk/reference/wallet",
               "sdk/reference/account",
               "sdk/reference/payments",
+              "sdk/reference/contacts",
+              "sdk/reference/chat",
               "sdk/reference/config"
             ]
           }
@@ -118,7 +116,9 @@
             "group": "Transfers",
             "pages": [
               "api-reference/transfers/create",
+              "api-reference/transfers/submit",
               "api-reference/transfers/claim",
+              "api-reference/transfers/decline",
               "api-reference/transfers/cancel",
               "api-reference/transfers/list",
               "api-reference/transfers/get"
@@ -130,8 +130,24 @@
               "api-reference/accounts/create",
               "api-reference/accounts/deposit",
               "api-reference/accounts/transfer",
+              "api-reference/accounts/add-operator",
+              "api-reference/accounts/remove-operator",
+              "api-reference/accounts/pause",
+              "api-reference/accounts/close",
               "api-reference/accounts/get",
               "api-reference/accounts/get-by-operator"
+            ]
+          },
+          {
+            "group": "Chat",
+            "pages": [
+              "api-reference/chat/send"
+            ]
+          },
+          {
+            "group": "Tokens",
+            "pages": [
+              "api-reference/tokens/list"
             ]
           },
           {

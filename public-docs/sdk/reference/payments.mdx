@@ -20,24 +20,32 @@ silk pay <recipient> <amount> [--memo <text>] [--wallet <label>]
 
 | Parameter | Required | Description |
 | --------- | -------- | ----------- |
-| `recipient` | Yes | Solana address of the recipient |
+| `recipient` | Yes | Solana address or contact name |
 | `amount` | Yes | Amount in USDC |
 | `--memo <text>` | No | Optional memo attached to the transfer |
 | `--wallet <label>` | No | Specify which wallet to send from |
 
 ```bash
-silk pay 7xKXzM8q... 10 --memo "data analysis job"
+silk pay alice 10 --memo "data analysis job"
 ```
 
-```
-✓ Transfer created
-  Transfer PDA: 4bHUkQ9bR3mFVDg...
-  Amount: 10 USDC
-  Recipient: 7xKXzM8q...
-  Status: Active (awaiting claim)
+```json
+{
+  "ok": true,
+  "action": "pay",
+  "transferPda": "4bHUkQ9bR3mFVDg...",
+  "txid": "5UfDuXsr...",
+  "amount": 10,
+  "recipient": "7xKXzM8q...",
+  "claimUrl": "https://app.silkyway.so/transfers/4bHUkQ9bR3mFVDg..."
+}
 ```
 
-The transfer PDA is the unique identifier for this escrow. Save it to claim or cancel later.
+The `claimUrl` is a shareable link the recipient can use to claim the transfer in their browser. The `transferPda` is the unique on-chain identifier for this escrow.
+
+<Info>
+  The recipient can be a contact name (e.g., `alice`) or a Solana address. See [Contacts](/sdk/reference/contacts) for address book management.
+</Info>
 
 ---
 
@@ -144,6 +152,7 @@ silk pay → Active (in escrow)
              │
              ├── silk claim → Claimed (recipient got tokens)
              ├── silk cancel → Cancelled (sender got tokens back)
+             ├── (declined) → Declined (recipient refused the transfer)
              ├── (expired) → Expired (claim window passed)
              └── (rejected) → Rejected (pool operator intervened)
 ```

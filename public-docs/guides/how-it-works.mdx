@@ -90,6 +90,9 @@ Handshake is the payment layer. It provides escrow-based token transfers between
   <Step title="Or sender cancels">
     If the recipient hasn't claimed, the sender can cancel. Tokens return to the sender. Transfer status becomes `Cancelled`.
   </Step>
+  <Step title="Or recipient declines">
+    The recipient can decline the transfer instead of claiming it. Tokens return to the sender. Transfer status becomes `Declined`.
+  </Step>
 </Steps>
 
 ### Transfer States

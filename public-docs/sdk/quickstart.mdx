@@ -22,6 +22,22 @@ Verify:
 silk --version
 ```
 
+## Configure the Cluster
+
+By default the SDK targets mainnet. For testing, switch to devnet:
+
+```bash
+silk config set-cluster devnet
+```
+
+```json
+{ "ok": true, "cluster": "devnet", "apiUrl": "https://devnet-api.silkyway.ai" }
+```
+
+<Info>
+  Set the cluster before creating wallets or making payments. The SDK routes all API calls to the cluster-specific backend.
+</Info>
+
 ## Create a Wallet
 
 ```bash
@@ -70,14 +86,19 @@ Send USDC through the Handshake escrow system:
 silk pay <recipient_address> 10 --memo "hello from my agent"
 ```
 
-```
-✓ Transfer created
-  Transfer PDA: 4bHUkQ9...
-  Amount: 10 USDC
-  Status: Active (awaiting claim)
+```json
+{
+  "ok": true,
+  "action": "pay",
+  "transferPda": "4bHUkQ9...",
+  "txid": "5UfDuXsr...",
+  "amount": 10,
+  "recipient": "<recipient_address>",
+  "claimUrl": "https://app.silkyway.so/transfers/4bHUkQ9..."
+}
 ```
 
-The tokens are now in escrow. The recipient can claim them:
+The tokens are now in escrow. Share the `claimUrl` with the recipient, or they can claim via CLI:
 
 ```bash
 silk claim 4bHUkQ9...
@@ -160,13 +181,33 @@ silk balance --wallet second-agent
 silk pay <recipient> 5 --wallet second-agent
 ```
 
+## Contacts (Optional)
+
+Save frequently used addresses as contacts:
+
+```bash
+silk contacts add alice 7xKXzM8q4bR3nFVDg2Thh3AG6sFRPqNr
+```
+
+Then use the name instead of the address:
+
+```bash
+silk pay alice 10 --memo "payment"
+silk account send alice 5
+```
+
+See the [Contacts reference](/sdk/reference/contacts) for details.
+
 ## Configuration
 
 The SDK stores configuration at `~/.config/silk/config.json`:
 
 ```bash
-# View current API endpoint
-silk config get-api-url
+# View current cluster
+silk config get-cluster
+
+# Switch to devnet
+silk config set-cluster devnet
 
 # Override API endpoint (for local development)
 silk config set-api-url http://localhost:3000
