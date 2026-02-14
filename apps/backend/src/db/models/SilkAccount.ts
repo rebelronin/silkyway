@@ -1,6 +1,6 @@
 import { Entity, PrimaryKey, Property, Enum, Collection, OneToMany } from '@mikro-orm/core';
 import { v4 } from 'uuid';
-import { SilkAccountOperator } from './SilkAccountOperator';
+import type { SilkAccountOperator } from './SilkAccountOperator';
 
 export enum SilkAccountStatus {
   ACTIVE = 'ACTIVE',
@@ -24,7 +24,7 @@ export class SilkAccount {
   @Enum(() => SilkAccountStatus)
   status: SilkAccountStatus = SilkAccountStatus.ACTIVE;
 
-  @OneToMany(() => SilkAccountOperator, (op) => op.account)
+  @OneToMany('SilkAccountOperator', 'account')
   operators = new Collection<SilkAccountOperator>(this);
 
   @Property()
