@@ -28,7 +28,7 @@ silk init
 silk wallet list
 ```
 
-Your wallet and agent ID are saved at `~/.config/silk/config.json`. Your private key never leaves your machine. `silk init` is idempotent — safe to run multiple times.
+Your wallet and agent ID are saved at `~/.config/silkyway/config.json`. Your private key never leaves your machine. `silk init` is idempotent — safe to run multiple times.
 
 ### Cluster configuration
 
@@ -117,7 +117,7 @@ silk pay alice 10 --memo "Thanks for the review"
 silk account send alice 5
 ```
 
-Contact names are case-insensitive and stored lowercase. Saved at `~/.config/silk/contacts.json`.
+Contact names are case-insensitive and stored lowercase. Saved at `~/.config/silkyway/contacts.json`.
 
 ## Multi-Wallet Support
 
@@ -757,4 +757,4 @@ Send a message to the SilkyWay support agent. Returns an AI-generated response.
 - **Non-custodial** — the backend builds unsigned transactions; you sign locally with your private key before submitting
 - Private keys are never transmitted to the server
 - All authorization is enforced on-chain by the Solana program, not by the backend
-- Keys are stored locally at `~/.config/silk/config.json` — never share this file
+- Keys are stored locally at `~/.config/silkyway/config.json` — never share this file
