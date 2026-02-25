@@ -55,6 +55,7 @@
       background: white;
       animation: twinkle var(--duration) ease-in-out infinite;
       animation-delay: var(--delay);
+      will-change: transform, opacity;
     }
 
     @keyframes twinkle {
@@ -80,9 +81,9 @@
     }
 
     @keyframes nebulaShift {
-      0% { opacity: 0.8; filter: hue-rotate(0deg); }
-      50% { opacity: 1; filter: hue-rotate(10deg); }
-      100% { opacity: 0.8; filter: hue-rotate(-5deg); }
+      0% { opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { opacity: 0.8; }
     }
 
     /* Solar corona overlay — the "sun" glow from behind the title */
@@ -131,6 +132,7 @@
       border-radius: 50%;
       animation: drift var(--drift-duration) linear infinite;
       animation-delay: var(--drift-delay);
+      will-change: transform, opacity;
     }
 
     @keyframes drift {
@@ -146,8 +148,8 @@
     }
 
     @keyframes solarFlare {
-      0%, 100% { text-shadow: var(--glow-gold); }
-      50% { text-shadow: 0 0 30px rgba(251, 191, 36, 0.8), 0 0 80px rgba(251, 191, 36, 0.4), 0 0 120px rgba(249, 115, 22, 0.2); }
+      0%, 100% { opacity: 0.85; }
+      50% { opacity: 1; }
     }
 
     @keyframes orbitLine {
@@ -596,7 +598,7 @@
       <section class="panel">
         <span class="panel-icon">&#10095;</span>
         <h2>Get Started</h2>
-        <p>Create an account, authorize an agent, set spending policies. Your agent operates within on-chain guardrails. Point your agent at the skill file or install the <a href="https://clawhub.ai/silostack/silk" target="_blank" rel="noopener" style="color: var(--nebula-purple); text-decoration: underline; text-underline-offset: 3px;">silk</a> clawhub skill.</p>
+        <p>Create an account, authorize an agent, set spending policies. Your agent operates within on-chain guardrails. Point your agent at the skill file or install the <a href="https://clawhub.ai/silostack/silkyway" target="_blank" rel="noopener" style="color: var(--nebula-purple); text-decoration: underline; text-underline-offset: 3px;">silkyway</a> clawhub skill.</p>
         <p style="font-size: 0.8rem; color: rgba(250, 245, 255, 0.4); margin-top: 0.5rem; font-family: 'DM Mono', monospace;">$ silk account sync</p>
         <ul class="link-list">
           <li><a href="https://app.silkyway.ai" target="_blank" rel="noopener">Launch App</a></li>
@@ -625,7 +627,7 @@
     // Generate starfield
     (function() {
       const field = document.getElementById('starfield');
-      const count = 160;
+      const count = 70;
       for (let i = 0; i < count; i++) {
         const star = document.createElement('div');
         star.className = 'star';
