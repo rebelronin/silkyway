@@ -43,6 +43,8 @@ export class WellKnownController {
           cancel_transfer: 'POST /api/tx/cancel-transfer',
           submit: 'POST /api/tx/submit',
           faucet: 'POST /api/tx/faucet',
+          intent_build: 'POST /api/intent/build',
+          intent_analyze: 'POST /api/intent/analyze',
           list_transfers: 'GET /api/transfers?wallet={pubkey}',
           get_transfer: 'GET /api/transfers/{pda}',
           balance: 'GET /api/wallet/{address}/balance',
